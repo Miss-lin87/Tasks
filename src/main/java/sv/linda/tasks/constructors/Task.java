@@ -1,12 +1,14 @@
 package sv.linda.tasks.constructors;
 
 import lombok.Getter;
+import lombok.Setter;
 import sv.linda.tasks.enums.Status;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 public class Task {
     private String title;
     private Status status;
@@ -27,6 +29,13 @@ public class Task {
         this.subtasks = new ArrayList<>();
     }
 
+    public Task(String name, String description, Status status) {
+        this.title = name;
+        this.status = status;
+        this.description = description;
+        this.subtasks = new ArrayList<>();
+    }
+
     public void changeStatus(Status status) {
         this.status = status;
     }
@@ -37,5 +46,15 @@ public class Task {
 
     public void removeSubtask(Task subtask) {
         this.subtasks.remove(subtask);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title +
+                ", status=" + status +
+                ", description='" + description +
+                ", subtasks=" + subtasks +
+                '}' + "\n";
     }
 }

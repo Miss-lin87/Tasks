@@ -1,12 +1,10 @@
 package sv.linda.tasks.enums;
 
-import lombok.Getter;
-
-@Getter
 public enum Status {
     TODO("To Do"),
     IN_PROGRESS("In Progress"),
-    DONE("Done");
+    DONE("Done"),
+    DELETED("Deleted");
 
     private final String status;
 
