@@ -13,8 +13,10 @@ import sv.linda.tasks.constructors.Tasks;
 import sv.linda.tasks.enums.Status;
 import sv.linda.tasks.functions.saveTask;
 
+import javax.naming.Binding;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 
 @RestController
 public class TaskController implements WebMvcConfigurer {
@@ -59,9 +61,14 @@ public class TaskController implements WebMvcConfigurer {
     public ModelAndView testPage() {
         ModelAndView view = new ModelAndView();
         view.setViewName("tasksPage");
-        view.addObject("tasks", taskDAO.getTasks().getTaskList());
-        view.addObject("Statuses", Status.values());
+        view.addObject("tasks", taskDAO.getTasks().getTaskList());;
+        view.addObject("Statuses", Status.getAll());
         return view;
+    }
+
+    @PostMapping("/updateTask")
+    public void updateTask(Tasks tasks, BindingResult bind) throws IOException {
+        System.out.println("Its working");
     }
 
     //@GetMapping("/newTask/{name}/{description}")

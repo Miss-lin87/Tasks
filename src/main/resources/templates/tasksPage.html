@@ -14,16 +14,24 @@
         <th>Status</th>
     </tr>
     </thead>
+    <form action="#" th:action="@{/updateTask}" th:object="${tasks}" method="post">
     <tbody>
     <tr th:each="task: ${tasks}">
         <td th:text="${task.title}"></td>
-        <td th:text="${task.description}"></td>
-        <td th:text="${task.status}"></td>
-        <select>
-            <option th:each="status : ${Statuses}" th:text="${status.status}"></option>
-        </select>
+        <td>
+            <Textarea th:text="${task.description}"></textarea>
+        </td>
+        <td>
+            <label>
+                <select>
+                    <option th:each="status : ${Statuses}" th:text="${status.name}"></option>
+                </select>
+            </label>
+        </td>
     </tbody>
+        <button text="Save">Save</button>
+    </form>
 </table>
-    <button text="Add Task">Add new Task</button>
+    <button text="Add Task" th:action="">Add new Task</button>
 </body>
 </html>

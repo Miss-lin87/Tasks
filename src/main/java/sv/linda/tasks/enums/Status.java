@@ -1,19 +1,33 @@
 package sv.linda.tasks.enums;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public enum Status {
     TODO("To Do"),
     IN_PROGRESS("In Progress"),
     DONE("Done"),
     DELETED("Deleted");
 
-    private final String status;
+    private final String name;
 
-    Status(String status) {
-        this.status = status;
+    Status(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public static List<Status> getAll(){
+        List<Status> temp = new ArrayList<>(Arrays.asList(Status.values()));
+        temp.remove(Status.DELETED);
+        return temp;
     }
 
     @Override
     public String toString() {
-        return status;
+        return name;
     }
 }
