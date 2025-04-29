@@ -22,13 +22,12 @@ public class saveTask {
     public void save(Task task) throws IOException {
         try {
             File temp = new File("src/main/java/sv/linda/tasks/savedTasks/" + task.getTitle() + ".json");
-            if (temp.createNewFile()) {
+            if (temp.isFile() || temp.createNewFile()) {
                 FileWriter file = new FileWriter("src/main/java/sv/linda/tasks/savedTasks/" + task.getTitle() + ".json");
                 BufferedWriter write = new BufferedWriter(file);
                 write.write(makeObject(task).toJSONString());
                 write.close();
             } else {
-                System.out.println("This not work");
                 throw new IOException();
             }
         } catch (Exception e) {
@@ -36,13 +35,9 @@ public class saveTask {
         }
     }
 
-    public static void main(String[] args) {
-        Task task = new Task("Task4", "This is an example task.");
-        saveTask saver = new saveTask();
-        try {
-            saver.save(task);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws IOException {
+        saveTask save = new saveTask();
+        Task task = new Task("Task5", "new file");
+        save.save(task);
     }
 }

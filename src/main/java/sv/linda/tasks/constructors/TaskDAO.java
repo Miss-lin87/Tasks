@@ -1,8 +1,6 @@
 package sv.linda.tasks.constructors;
 
-import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Repository;
-import sv.linda.tasks.enums.Status;
 import sv.linda.tasks.functions.getInfo;
 
 import java.util.List;
@@ -15,20 +13,12 @@ public class TaskDAO {
 
     static {
         nameList = info.getTasks();
-        //for (int i = 0; i < nameList.size(); i++) {
-        //    tasks.getTaskList().add(info.toTask(nameList.get(i)));
-        //}
-        //tasks.getTaskList().add(info.toTask(nameList.get(0)));
         for (String name : nameList) {
             tasks.getTaskList().add(info.toTask(name));
         }
     }
 
     public Tasks getTasks() {
-        //for (String name : nameList) {
-        //    tasks.getTaskList().add(info.toTask(name));
-        //}
-        //tasks.getTaskList().add(info.toTask("Task2"));
         return tasks;
     }
 

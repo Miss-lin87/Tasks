@@ -29,7 +29,7 @@ public class getInfo {
         File[] listOfFiles = folder.listFiles();
         assert listOfFiles != null;
         for (File file : listOfFiles) {
-            if (file.isFile() && !file.getName().startsWith("bin")) {
+            if (file.isFile()) {
                 tasks.add(file.getName().substring(0, file.getName().indexOf(".json")));
             }
         }
@@ -39,9 +39,9 @@ public class getInfo {
     public Task toTask(String name) {
         JSONObject tempObject = makeJSON(name);
         Task task = new Task();
-        task.setTitle(tempObject.getAsString("TITLE")); // Assuming the JSON has a field "TITLE" Poop face
-        task.setDescription(tempObject.getAsString("DESCRIPTION")); //Its the ass of asses
-        task.setStatus(Enum.valueOf(Status.class, tempObject.getAsString("STATUS"))); // Wtf... only big ofc
+        task.setTitle(tempObject.getAsString("TITLE"));
+        task.setDescription(tempObject.getAsString("DESCRIPTION"));
+        task.setStatus(Enum.valueOf(Status.class, tempObject.getAsString("STATUS")));
         return task;
     }
 }
