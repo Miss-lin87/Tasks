@@ -1,5 +1,6 @@
 package sv.linda.tasks.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,10 +14,8 @@ import sv.linda.tasks.constructors.Tasks;
 import sv.linda.tasks.enums.Status;
 import sv.linda.tasks.functions.saveTask;
 
-import javax.naming.Binding;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 
 @RestController
 public class TaskController implements WebMvcConfigurer {
@@ -50,11 +49,11 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     @PostMapping("/addTask")
-    public String newTask(Task task, BindingResult bind) throws IOException {
+    public ModelAndView newTask(Task task, BindingResult bind) throws IOException {
         saveTask save = new saveTask();
         save.save(task);
         taskDAO.addTask(task);
-        return "Task added: " + task.getTitle();
+        return new ModelAndView("redirect:/");
     }
 
     @GetMapping("/")
@@ -67,16 +66,13 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     @PostMapping("/updateTask")
-    public void updateTask(Tasks tasks, BindingResult bind) throws IOException {
-        System.out.println("Its working");
+    public ModelAndView updateTask(HttpServletRequest request) throws IOException {
+        for (Task task : taskDAO.getTasks().getTaskList()) {
+            task.changeStatus(Status.valueOf(request.getParameter("Selected" + task.getTitle())));
+            new saveTask().save(task);
+        }
+        return new ModelAndView("redirect:/");
     }
-
-    //@GetMapping("/newTask/{name}/{description}")
-    //public Tasks newTask(@PathVariable String name, @PathVariable String description) {
-    //    Task task = new Task(name, description);
-    //    taskDAO.addTask(task);
-    //    return taskDAO.getTasks();
-    //}
 
     @PostMapping("/add")
     public ResponseEntity<Object> addTask(@RequestBody String name, String description) {

@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>Tasks</h1>
+<form action="#" th:action="@{/updateTask}" th:object="${tasks}" method="POST">
 <table>
     <thead>
     <tr>
@@ -14,24 +15,30 @@
         <th>Status</th>
     </tr>
     </thead>
-    <form action="#" th:action="@{/updateTask}" th:object="${tasks}" method="post">
     <tbody>
     <tr th:each="task: ${tasks}">
         <td th:text="${task.title}"></td>
         <td>
-            <Textarea th:text="${task.description}"></textarea>
+            <Textarea th:text="${task.description}" rows="5" cols="40" disabled></textarea>
         </td>
         <td>
             <label>
-                <select>
-                    <option th:each="status : ${Statuses}" th:text="${status.name}"></option>
-                </select>
-            </label>
-        </td>
-    </tbody>
-        <button text="Save">Save</button>
-    </form>
-</table>
-    <button text="Add Task" th:action="">Add new Task</button>
+                    <select th:name="Selected + ${task.title}">
+                        <option th:each="status : ${Statuses}"
+                                th:text="${status.name}"
+                                th:selected="${task.status.name == status.name}"
+                                th:value="${status.name}">
+                        </option>
+                    </select>
+                </label>
+            </td>
+        </tbody>
+    </table>
+        <button type="submit">Save</button>
+</form>
+
+<form action="#" th:action="@{/addTask}" method="GET">
+    <button text="Add Task">Add new Task</button>
+</form>
 </body>
 </html>
