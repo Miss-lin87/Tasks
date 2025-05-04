@@ -26,6 +26,15 @@ public enum Status {
         return temp;
     }
 
+    public static Status toEnum(String name) {
+        for (Status status : Status.values()) {
+            if (status.name.equalsIgnoreCase(name)) {
+                return status;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return name;

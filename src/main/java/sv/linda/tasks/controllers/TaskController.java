@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import sv.linda.tasks.constructors.ModelView;
 import sv.linda.tasks.constructors.Task;
 import sv.linda.tasks.constructors.TaskDAO;
 import sv.linda.tasks.constructors.Tasks;
@@ -19,6 +20,7 @@ import java.net.URI;
 
 @RestController
 public class TaskController implements WebMvcConfigurer {
+    private final ModelView View = new ModelView();
     private final TaskDAO taskDAO;
 
     @Autowired
@@ -43,9 +45,7 @@ public class TaskController implements WebMvcConfigurer {
     
     @GetMapping("/addTask")
     public ModelAndView loadPage(Task task) {
-        ModelAndView view = new ModelAndView();
-        view.setViewName("addTask");
-        return view;
+        return View.page("addTask");
     }
 
     @PostMapping("/addTask")
@@ -58,9 +58,8 @@ public class TaskController implements WebMvcConfigurer {
 
     @GetMapping("/")
     public ModelAndView testPage() {
-        ModelAndView view = new ModelAndView();
-        view.setViewName("tasksPage");
-        view.addObject("tasks", taskDAO.getTasks().getTaskList());;
+        ModelAndView view = View.page("tasksPage");
+        view.addObject("tasks", taskDAO.getTasks().getTaskList());
         view.addObject("Statuses", Status.getAll());
         return view;
     }
@@ -68,7 +67,7 @@ public class TaskController implements WebMvcConfigurer {
     @PostMapping("/updateTask")
     public ModelAndView updateTask(HttpServletRequest request) throws IOException {
         for (Task task : taskDAO.getTasks().getTaskList()) {
-            task.changeStatus(Status.valueOf(request.getParameter("Selected" + task.getTitle())));
+            task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
             new saveTask().save(task);
         }
         return new ModelAndView("redirect:/");
