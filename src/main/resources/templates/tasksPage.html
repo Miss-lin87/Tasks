@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>Tasks</h1>
+<form action="#" th:action="@{/updateTask}" th:object="${tasks}" method="POST">
 <table>
     <thead>
     <tr>
@@ -17,13 +18,27 @@
     <tbody>
     <tr th:each="task: ${tasks}">
         <td th:text="${task.title}"></td>
-        <td th:text="${task.description}"></td>
-        <td th:text="${task.status}"></td>
-        <select>
-            <option th:each="status : ${Statuses}" th:text="${status.status}"></option>
-        </select>
-    </tbody>
-</table>
+        <td>
+            <Textarea th:text="${task.description}" rows="5" cols="40" disabled></textarea>
+        </td>
+        <td>
+            <label>
+                    <select th:name="Selected + ${task.title}">
+                        <option th:each="status : ${Statuses}"
+                                th:text="${status.name}"
+                                th:selected="${task.status.name == status.name}"
+                                th:value="${status.name}">
+                        </option>
+                    </select>
+                </label>
+            </td>
+        </tbody>
+    </table>
+        <button type="submit">Save</button>
+</form>
+
+<form action="#" th:action="@{/addTask}" method="GET">
     <button text="Add Task">Add new Task</button>
+</form>
 </body>
 </html>

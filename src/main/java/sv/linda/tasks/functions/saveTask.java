@@ -2,6 +2,7 @@ package sv.linda.tasks.functions;
 
 import net.minidev.json.JSONObject;
 import sv.linda.tasks.constructors.Task;
+import sv.linda.tasks.enums.Status;
 import sv.linda.tasks.enums.TaskFields;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,6 +39,7 @@ public class saveTask {
     public static void main(String[] args) throws IOException {
         saveTask save = new saveTask();
         Task task = new Task("Task5", "new file");
+        task.changeStatus(Status.toEnum("To Do"));
         save.save(task);
     }
 }
