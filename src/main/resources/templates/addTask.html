@@ -21,12 +21,17 @@
                 <td>Description: </td>
                 <td>
                     <label>
-                        <textarea th:field="*{description}"></textarea>
+                        <textarea th:field="*{description}" rows="5" cols="40"></textarea>
                     </label>
                 </td>
             </tr>
         </table>
-        <button type="submit">Add Task</button>
+        <button type="submit" onclick="TaskAdded()">Add Task</button>
     </form>
+<script>
+    function TaskAdded() {
+        alert("Task added!");
+    }
+</script>
 </body>
 </html>
