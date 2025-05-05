@@ -12,6 +12,7 @@ import java.util.List;
 
 public class getInfo {
 
+    @Deprecated
     public JSONObject makeJSON(String title) {
         JSONObject temp;
         try {

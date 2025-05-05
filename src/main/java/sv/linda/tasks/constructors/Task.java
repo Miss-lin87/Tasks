@@ -1,6 +1,5 @@
 package sv.linda.tasks.constructors;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import sv.linda.tasks.enums.Status;

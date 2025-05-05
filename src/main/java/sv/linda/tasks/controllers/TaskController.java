@@ -29,12 +29,12 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     @GetMapping("/all")
-    public Tasks getTasks() {
+    private Tasks getTasks() {
         return taskDAO.getTasks();
     }
 
     @GetMapping("/{name}")
-    public Task getTask(@PathVariable String name) {
+    private Task getTask(@PathVariable String name) {
         for (Task task : taskDAO.getTasks().getTaskList()) {
             if (task.getTitle().equals(name)) {
                 return task;
@@ -44,7 +44,7 @@ public class TaskController implements WebMvcConfigurer {
     }
     
     @GetMapping("/addTask")
-    public ModelAndView loadPage(Task task) {
+    private ModelAndView loadPage(Task task) {
         return View.page("addTask");
     }
 
@@ -73,18 +73,6 @@ public class TaskController implements WebMvcConfigurer {
         return new ModelAndView("redirect:/");
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Object> addTask(@RequestBody String name, String description) {
-        Task task = new Task(name, description);
-        taskDAO.addTask(task);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{name}")
-                .buildAndExpand(task)
-                .toUri();
-        return ResponseEntity.created(location).build();
-    }
-
     @PostMapping("/adding")
     public ResponseEntity<Object> addTasks(@RequestParam Task task) {
         taskDAO.addTask(task);
@@ -93,7 +81,6 @@ public class TaskController implements WebMvcConfigurer {
                 .path("/{name}")
                 .buildAndExpand(task)
                 .toUri();
-        System.out.println("{/name}");
         return ResponseEntity.created(location).build();
     }
 }

@@ -34,11 +34,17 @@
             </td>
         </tbody>
     </table>
-        <button type="submit">Save</button>
-</form>
+        <button type="submit" onclick="Alert()">Save</button>
+    </form>
 
 <form action="#" th:action="@{/addTask}" method="GET">
     <button text="Add Task">Add new Task</button>
 </form>
+
+<script>
+    function Alert() {
+        alert("Tasks updated successfully!");
+    }
+</script>
 </body>
 </html>
