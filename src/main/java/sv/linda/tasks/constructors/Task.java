@@ -11,21 +11,21 @@ import java.util.List;
 @Setter
 public class Task {
     private String title;
-    private Status status;
     private String description;
+    private Status status;
     private List<Task> subtasks;
 
     public Task() {
         this.title = "";
-        this.status = Status.TODO;
         this.description = "";
+        this.status = Status.TODO;
         this.subtasks = new ArrayList<>();
     }
 
     public Task(String title, String description) {
         this.title = title;
-        this.status = Status.TODO;
         this.description = description;
+        this.status = Status.TODO;
         this.subtasks = new ArrayList<>();
     }
 

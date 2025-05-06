@@ -6,32 +6,28 @@
 </head>
 <body>
     <label>Adding a task</label>
+    <table>
+        <tr th:each="ObjectError : ${errors}">
+            <td th:text="${ObjectError}"></td>
+        </tr>
+    </table>
 
-    <form action="#" th:action="@{/addTask}" th:object="${task}"  method="POST">
+    <form action="#" th:action="@{/addTask}" th:object="${task}" method="POST">
         <table>
             <tr>
                 <td>Title: </td>
-                <td>
-                    <label>
-                        <input type="text" th:field="*{title}">
-                    </label>
-                </td>
+                <td><input type="text" th:field="*{title}"></td>
+                <td th:errors="*{title}"></td>
             </tr>
             <tr>
                 <td>Description: </td>
-                <td>
-                    <label>
-                        <textarea th:field="*{description}" rows="5" cols="40"></textarea>
-                    </label>
-                </td>
+                <td><textarea th:field="*{description}" rows="5" cols="40"></textarea></td>
+                <td th:errors="*{description}">r</td>
             </tr>
         </table>
-        <button type="submit" onclick="TaskAdded()">Add Task</button>
+        <button type="submit">Add Task</button>
     </form>
 <script>
-    function TaskAdded() {
-        alert("Task added!");
-    }
 </script>
 </body>
 </html>

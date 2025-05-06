@@ -18,12 +18,13 @@ public class TaskValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors error) {
-        ValidationUtils.rejectIfEmpty(error, "title", "title.empty");
         Task task = (Task) target;
-        if (nameList.contains(task.getTitle())) {
-            error.rejectValue("title", "title.already.exists");
+        if (task.getTitle().isEmpty()) {
+            error.rejectValue("title", "title.empty", "You need to enter a name");
+        } else if (nameList.contains(task.getTitle())) {
+            error.rejectValue("title", "title.already.exists" ,"That task name is in use");
         } else if (task.getDescription().isEmpty()) {
-            error.rejectValue("description", "description.empty");
+            error.rejectValue("description", "description.empty", "You need a description");
         }
     }
 
