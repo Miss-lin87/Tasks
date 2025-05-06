@@ -1,5 +1,6 @@
 package sv.linda.tasks.constructors;
 
+import lombok.Getter;
 import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;

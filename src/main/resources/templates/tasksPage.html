@@ -19,7 +19,9 @@
     <tr th:each="task: ${tasks}">
         <td th:text="${task.title}"></td>
         <td>
-            <Textarea th:text="${task.description}" rows="5" cols="40" disabled></textarea>
+            <label>
+                <Textarea th:text="${task.description}" rows="5" cols="40" disabled></textarea>
+            </label>
         </td>
         <td>
             <label>
@@ -32,6 +34,9 @@
                     </select>
                 </label>
             </td>
+        <td>
+            <button th:formaction="@{/deleteTask/} + ${task.title}" th:value="${task.title}" formmethod="POST">Delete</button>
+        </td>
         </tbody>
     </table>
         <button type="submit" onclick="Alert()">Save</button>

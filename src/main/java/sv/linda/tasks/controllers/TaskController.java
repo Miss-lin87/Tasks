@@ -21,8 +21,13 @@ import sv.linda.tasks.enums.Status;
 import sv.linda.tasks.functions.saveTask;
 import sv.linda.tasks.validation.TaskValidator;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Objects;
+import java.util.logging.FileHandler;
 
 @RestController
 public class TaskController implements WebMvcConfigurer {
@@ -45,6 +50,7 @@ public class TaskController implements WebMvcConfigurer {
     private Task getTask(@PathVariable String name) {
         for (Task task : taskDAO.getTasks().getTaskList()) {
             if (task.getTitle().equals(name)) {
+                System.out.println(task.getTitle());
                 return task;
             }
         }
@@ -70,11 +76,13 @@ public class TaskController implements WebMvcConfigurer {
     public ModelAndView newTask(Task task, BindingResult bind) throws IOException {
         Errors errors = new BeanPropertyBindingResult(task, "task");
         valid.validate(task, errors);
+        ModelAndView view = new ModelAndView("addTask");
         if (errors.hasErrors()) {
-            System.out.println(errors.getAllErrors());
-            ModelAndView view = View.page("addTask");
-            view.addObject("errors", errors.getAllErrors());
-            return View.page("addTask");
+            String nameerror = (errors.getFieldError("title") == null) ? "" : Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage();
+            String descriptionError = (errors.getFieldError("description") == null) ? "" : Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage();
+            view.addObject("nameError", nameerror);
+            view.addObject("descriptionError", descriptionError);
+            return view;
         } else {
             saveTask save = new saveTask();
             save.save(task);
@@ -97,6 +105,14 @@ public class TaskController implements WebMvcConfigurer {
             task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
             new saveTask().save(task);
         }
+        return new ModelAndView("redirect:/");
+    }
+
+    @PostMapping("/deleteTask/{name}")
+    public ModelAndView deleteTask(@PathVariable String name) throws IOException {
+        taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
+        String path = "src/main/java/sv/linda/tasks/savedTasks/" + name + ".json";
+        new File(path).delete();
         return new ModelAndView("redirect:/");
     }
 

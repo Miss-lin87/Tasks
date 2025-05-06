@@ -6,23 +6,17 @@
 </head>
 <body>
     <label>Adding a task</label>
-    <table>
-        <tr th:each="ObjectError : ${errors}">
-            <td th:text="${ObjectError}"></td>
-        </tr>
-    </table>
 
     <form action="#" th:action="@{/addTask}" th:object="${task}" method="POST">
         <table>
-            <tr>
                 <td>Title: </td>
                 <td><input type="text" th:field="*{title}"></td>
-                <td th:errors="*{title}"></td>
-            </tr>
+                <td th:text="${nameError}"></td>
             <tr>
                 <td>Description: </td>
                 <td><textarea th:field="*{description}" rows="5" cols="40"></textarea></td>
                 <td th:errors="*{description}">r</td>
+                <td th:text="${descriptionError}"></td>
             </tr>
         </table>
         <button type="submit">Add Task</button>

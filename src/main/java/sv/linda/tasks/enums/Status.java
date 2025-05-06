@@ -26,9 +26,9 @@ public enum Status {
         return temp;
     }
 
-    public static Status toEnum(String name) {
+    public static Status toEnum(String title) {
         for (Status status : Status.values()) {
-            if (status.name.equalsIgnoreCase(name)) {
+            if (status.name.equalsIgnoreCase(title)) {
                 return status;
             }
         }

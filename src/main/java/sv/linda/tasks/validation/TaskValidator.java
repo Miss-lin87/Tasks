@@ -21,10 +21,12 @@ public class TaskValidator implements Validator {
         Task task = (Task) target;
         if (task.getTitle().isEmpty()) {
             error.rejectValue("title", "title.empty", "You need to enter a name");
-        } else if (nameList.contains(task.getTitle())) {
+        } if (nameList.contains(task.getTitle())) {
             error.rejectValue("title", "title.already.exists" ,"That task name is in use");
-        } else if (task.getDescription().isEmpty()) {
+        } if (task.getDescription().isEmpty()) {
             error.rejectValue("description", "description.empty", "You need a description");
+        } if (task.getDescription().length() < 10) {
+            error.rejectValue("description", "description.too.short", "Description is too short. Minimum 10 characters");
         }
     }
 
