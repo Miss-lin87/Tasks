@@ -3,7 +3,7 @@ package sv.linda.tasks.constructors;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ModelView {
-    private ModelAndView modelAndView;
+    private final ModelAndView modelAndView;
 
     public ModelView() {
         this.modelAndView = new ModelAndView();

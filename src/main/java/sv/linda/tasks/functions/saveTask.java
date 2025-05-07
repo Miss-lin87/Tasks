@@ -1,6 +1,7 @@
 package sv.linda.tasks.functions;
 
 import net.minidev.json.JSONObject;
+import sv.linda.tasks.Constant;
 import sv.linda.tasks.constructors.Task;
 import sv.linda.tasks.enums.TaskFields;
 import java.io.BufferedWriter;
@@ -21,9 +22,9 @@ public class saveTask {
 
     public void save(Task task) throws IOException {
         try {
-            File temp = new File("src/main/java/sv/linda/tasks/savedTasks/" + task.getTitle() + ".json");
+            File temp = new File(Constant.SAVE_PATH.formatted(task.getTitle()));
             if (temp.isFile() || temp.createNewFile()) {
-                FileWriter file = new FileWriter("src/main/java/sv/linda/tasks/savedTasks/" + task.getTitle() + ".json");
+                FileWriter file = new FileWriter(Constant.SAVE_PATH.formatted(task.getTitle()));
                 BufferedWriter write = new BufferedWriter(file);
                 write.write(makeObject(task).toJSONString());
                 write.close();

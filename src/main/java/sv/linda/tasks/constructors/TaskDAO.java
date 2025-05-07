@@ -1,13 +1,14 @@
 package sv.linda.tasks.constructors;
 
 import org.springframework.stereotype.Repository;
-import sv.linda.tasks.functions.getInfo;
+import sv.linda.tasks.functions.GetInfo;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @Repository
 public class TaskDAO {
-    private static final getInfo info = new getInfo();
+    private static final GetInfo info = new GetInfo();
     private static final Tasks tasks = new Tasks();
     private static final List<String> nameList;
 

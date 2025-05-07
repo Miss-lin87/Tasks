@@ -2,6 +2,7 @@ package sv.linda.tasks.functions;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
+import sv.linda.tasks.Constant;
 import sv.linda.tasks.constructors.Task;
 import sv.linda.tasks.enums.Status;
 
@@ -10,13 +11,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class getInfo {
+public class GetInfo {
 
     @Deprecated
     public JSONObject makeJSON(String title) {
         JSONObject temp;
         try {
-            Object obj = new JSONParser().parse(new FileReader("src/main/java/sv/linda/tasks/savedTasks/" + title + ".json"));
+            Object obj = new JSONParser().parse(new FileReader(Constant.SAVE_PATH.formatted(title)));
             temp = (JSONObject) obj;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -26,7 +27,7 @@ public class getInfo {
 
     public List<String> getTasks() {
         ArrayList<String> tasks = new ArrayList<>();
-        File folder = new File("src/main/java/sv/linda/tasks/savedTasks");
+        File folder = new File(Constant.TASKS_PATH);
         File[] listOfFiles = folder.listFiles();
         assert listOfFiles != null;
         for (File file : listOfFiles) {

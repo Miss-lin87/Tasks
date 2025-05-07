@@ -1,15 +1,14 @@
 package sv.linda.tasks.validation;
 
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import sv.linda.tasks.constructors.Task;
-import sv.linda.tasks.functions.getInfo;
+import sv.linda.tasks.functions.GetInfo;
 
 import java.util.List;
 
 public class TaskValidator implements Validator {
-    private List<String> nameList = new getInfo().getTasks();
+    private final List<String> nameList = new GetInfo().getTasks();
 
     @Override
     public boolean supports(Class clazz) {
@@ -19,13 +18,22 @@ public class TaskValidator implements Validator {
     @Override
     public void validate(Object target, Errors error) {
         Task task = (Task) target;
-        if (task.getTitle().isEmpty()) {
+        validateTitle(task.getTitle(), error);
+        validateDescription(task.getDescription(), error);
+    }
+
+    private void validateTitle(String title, Errors error) {
+        if (title == null || title.trim().isEmpty()) {
             error.rejectValue("title", "title.empty", "You need to enter a name");
-        } if (nameList.contains(task.getTitle())) {
-            error.rejectValue("title", "title.already.exists" ,"That task name is in use");
-        } if (task.getDescription().isEmpty()) {
+        } else if (nameList.contains(title)) {
+            error.rejectValue("title", "title.already.exists", "That task name is in use");
+        }
+    }
+
+    private void validateDescription(String description, Errors error) {
+        if (description == null || description.isEmpty()) {
             error.rejectValue("description", "description.empty", "You need a description");
-        } if (task.getDescription().length() < 10) {
+        } else if (description.length() < 10) {
             error.rejectValue("description", "description.too.short", "Description is too short. Minimum 10 characters");
         }
     }
