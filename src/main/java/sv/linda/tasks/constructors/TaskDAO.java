@@ -1,5 +1,6 @@
 package sv.linda.tasks.constructors;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
 import sv.linda.tasks.functions.GetInfo;
 
@@ -8,14 +9,18 @@ import java.util.List;
 
 @Repository
 public class TaskDAO {
-    private static final GetInfo info = new GetInfo();
-    private static final Tasks tasks = new Tasks();
-    private static final List<String> nameList;
+    private final GetInfo info = new GetInfo();
+    private final Tasks tasks = new Tasks();
+    private List<String> nameList;
 
-    static {
+    @PostConstruct
+    public void init() {
         nameList = info.getTasks();
         for (String name : nameList) {
-            tasks.getTaskList().add(info.toTask(name));
+            try {
+                tasks.getTaskList().add(info.toTask(name));
+            } catch (FileNotFoundException ignored) {
+            }
         }
     }
 
