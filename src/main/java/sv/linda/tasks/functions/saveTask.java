@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 public class saveTask {
+    private Constant con;
 
     private JSONObject makeObject(Task task) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         JSONObject jsonObject = new JSONObject();
@@ -22,9 +23,9 @@ public class saveTask {
 
     public void save(Task task) throws IOException {
         try {
-            File temp = new File(Constant.SAVE_PATH.formatted(task.getTitle()));
+            File temp = new File(con.getSAVE_PATH().formatted(task.getTitle()));
             if (temp.isFile() || temp.createNewFile()) {
-                FileWriter file = new FileWriter(Constant.SAVE_PATH.formatted(task.getTitle()));
+                FileWriter file = new FileWriter(con.getSAVE_PATH().formatted(task.getTitle()));
                 BufferedWriter write = new BufferedWriter(file);
                 write.write(makeObject(task).toJSONString());
                 write.close();

@@ -7,30 +7,28 @@ import sv.linda.tasks.constructors.Task;
 import sv.linda.tasks.enums.Status;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GetInfo {
+    public Constant con = new Constant();
+    protected File[] listOfFiles = new File(con.getTASKS_PATH()).listFiles();
 
-    @Deprecated
-    public JSONObject makeJSON(String title) {
+    public JSONObject makeJSON(String title) throws FileNotFoundException {
         JSONObject temp;
         try {
-            Object obj = new JSONParser().parse(new FileReader(Constant.SAVE_PATH.formatted(title)));
-            temp = (JSONObject) obj;
+            temp = (JSONObject) new JSONParser().parse(new FileReader(con.getSAVE_PATH().formatted(title)));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new FileNotFoundException();
         }
         return temp;
     }
 
     public List<String> getTasks() {
         ArrayList<String> tasks = new ArrayList<>();
-        File folder = new File(Constant.TASKS_PATH);
-        File[] listOfFiles = folder.listFiles();
-        assert listOfFiles != null;
-        for (File file : listOfFiles) {
+        for (File file : this.listOfFiles) {
             if (file.isFile()) {
                 tasks.add(file.getName().substring(0, file.getName().indexOf(".json")));
             }
@@ -38,7 +36,7 @@ public class GetInfo {
         return tasks;
     }
 
-    public Task toTask(String name) {
+    public Task toTask(String name) throws FileNotFoundException {
         JSONObject tempObject = makeJSON(name);
         Task task = new Task();
         task.setTitle(tempObject.getAsString("TITLE"));

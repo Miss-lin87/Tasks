@@ -8,7 +8,7 @@ import sv.linda.tasks.functions.GetInfo;
 import java.util.List;
 
 public class TaskValidator implements Validator {
-    private final List<String> nameList = new GetInfo().getTasks();
+    final List<String> nameList = new GetInfo().getTasks();
 
     @Override
     public boolean supports(Class clazz) {

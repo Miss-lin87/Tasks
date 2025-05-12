@@ -1,6 +1,8 @@
 package sv.linda.tasks.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -53,7 +55,7 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     @GetMapping("/addTask")
-    public ModelAndView loadNewTask(Task task, Errors errors) {
+    public ModelAndView loadNewTask(@Valid Task task, Errors errors) {
         return view.page("addTask");
     }
 
@@ -90,9 +92,9 @@ public class TaskController implements WebMvcConfigurer {
     @PostMapping("/deleteTask/{name}")
     public ModelAndView deleteTask(@PathVariable String name) throws IOException {
         taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
-        Path path = Path.of(Constant.SAVE_PATH.formatted(name));
+        Path path = Path.of(new Constant().getSAVE_PATH().formatted(name));
         Files.delete(path);
-        return view.page(main);
+        return view.page("testing");
     }
 
     @PostMapping("/adding")
