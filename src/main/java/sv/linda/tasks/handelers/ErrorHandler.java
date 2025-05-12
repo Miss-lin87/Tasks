@@ -12,14 +12,13 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 @RestControllerAdvice
-class ErrorHandler {
-    private Constant con;
+class ErrorHandler extends Constant {
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<String> handelIOException(HttpServletRequest request, IOException ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(con.getBASIC_ERROR() + ex.getMessage());
+                .body(BASIC_ERROR + ex.getMessage());
     }
 
     @ExceptionHandler(FileNotFoundException.class)
@@ -33,27 +32,27 @@ class ErrorHandler {
     public ResponseEntity<String> handelNoSuchMethod(HttpServletRequest request, NoSuchMethodException ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(con.getBASIC_ERROR() + ex.getMessage());
+                .body(BASIC_ERROR + ex.getMessage());
     }
 
     @ExceptionHandler(InvocationTargetException.class)
     public ResponseEntity<String> handelInvocationTarget(HttpServletRequest request, InvocationTargetException ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(con.getBASIC_ERROR() + ex.getMessage());
+                .body(BASIC_ERROR + ex.getMessage());
     }
 
     @ExceptionHandler(IllegalAccessException.class)
     public ResponseEntity<String> handelIllegalAccess(HttpServletRequest request, IllegalAccessException ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(con.getBASIC_ERROR() + ex.getMessage());
+                .body(BASIC_ERROR + ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handelGeneralException(HttpServletRequest request, Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(con.getBASIC_ERROR() + ex.getMessage());
+                .body(BASIC_ERROR + ex.getMessage());
     }
 }

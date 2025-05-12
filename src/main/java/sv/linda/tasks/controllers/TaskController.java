@@ -2,7 +2,6 @@ package sv.linda.tasks.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -18,7 +17,7 @@ import sv.linda.tasks.constructors.Task;
 import sv.linda.tasks.constructors.TaskDAO;
 import sv.linda.tasks.constructors.Tasks;
 import sv.linda.tasks.enums.Status;
-import sv.linda.tasks.functions.saveTask;
+import sv.linda.tasks.functions.SaveTask;
 import sv.linda.tasks.validation.TaskValidator;
 import java.io.IOException;
 import java.net.URI;
@@ -27,7 +26,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 @RestController
-public class TaskController implements WebMvcConfigurer {
+public class TaskController extends Constant implements WebMvcConfigurer {
     private final ModelView view = new ModelView();
     private final TaskDAO taskDAO;
     private final TaskValidator valid;
@@ -84,7 +83,7 @@ public class TaskController implements WebMvcConfigurer {
     public ModelAndView updateTask(HttpServletRequest request) throws IOException {
         for (Task task : taskDAO.getTasks().getTaskList()) {
             task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
-            new saveTask().save(task);
+            new SaveTask().save(task);
         }
         return view.page(main);
     }
@@ -92,7 +91,7 @@ public class TaskController implements WebMvcConfigurer {
     @PostMapping("/deleteTask/{name}")
     public ModelAndView deleteTask(@PathVariable String name) throws IOException {
         taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
-        Path path = Path.of(new Constant().getSAVE_PATH().formatted(name));
+        Path path = Path.of(SAVE_PATH.formatted(name));
         Files.delete(path);
         return view.page("testing");
     }
@@ -118,7 +117,7 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     private void saveTask(Task task) throws IOException {
-        saveTask save = new saveTask();
+        SaveTask save = new SaveTask();
         save.save(task);
         taskDAO.addTask(task);
     }

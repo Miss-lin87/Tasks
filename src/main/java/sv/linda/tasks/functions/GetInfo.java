@@ -1,29 +1,38 @@
 package sv.linda.tasks.functions;
 
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
+import com.google.gson.Gson;
+import lombok.Getter;
 import sv.linda.tasks.Constant;
 import sv.linda.tasks.constructors.Task;
-import sv.linda.tasks.enums.Status;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetInfo {
-    public Constant con = new Constant();
-    protected File[] listOfFiles = new File(con.getTASKS_PATH()).listFiles();
+@Getter
+public class GetInfo extends Constant {
+    protected File[] listOfFiles;
+    protected Gson gson;
 
-    public JSONObject makeJSON(String title) throws FileNotFoundException {
-        JSONObject temp;
-        try {
-            temp = (JSONObject) new JSONParser().parse(new FileReader(con.getSAVE_PATH().formatted(title)));
-        } catch (Exception e) {
-            throw new FileNotFoundException();
+    public GetInfo(File[] listOfFiles) {
+        this.listOfFiles = listOfFiles;
+        gson = new Gson();
+    }
+
+    protected Task makeTask(File file) throws FileNotFoundException {
+        Reader read = new FileReader(file);
+        return gson.fromJson(read, Task.class);
+    }
+
+    public Task toTask(String title) throws FileNotFoundException {
+        for (File F : listOfFiles) {
+            if (F.getName().equals(title + ".json")) {
+                return makeTask(F);
+            }
         }
-        return temp;
+        return null;
     }
 
     public List<String> getTasks() {
@@ -34,14 +43,5 @@ public class GetInfo {
             }
         }
         return tasks;
-    }
-
-    public Task toTask(String name) throws FileNotFoundException {
-        JSONObject tempObject = makeJSON(name);
-        Task task = new Task();
-        task.setTitle(tempObject.getAsString("TITLE"));
-        task.setDescription(tempObject.getAsString("DESCRIPTION"));
-        task.setStatus(Enum.valueOf(Status.class, tempObject.getAsString("STATUS")));
-        return task;
     }
 }

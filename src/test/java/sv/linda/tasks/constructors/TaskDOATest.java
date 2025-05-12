@@ -8,8 +8,10 @@ class TaskDOATest {
     @Test
     void testEmptyTaskDAO() {
         TaskDAO taskDAO = new TaskDAO();
-        Assertions.assertTrue(taskDAO.getTasks().getTaskList().isEmpty());
-        Assertions.assertNotEquals(null, taskDAO.getTasks().getTaskList());
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(taskDAO.getTasks().getTaskList().isEmpty()),
+                () -> Assertions.assertNotEquals(null, taskDAO.getTasks().getTaskList())
+        );
     }
 
     @Test
