@@ -3,14 +3,15 @@ package sv.linda.tasks.controllers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import sv.linda.tasks.Constant;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.functions.GetInfo;
 import sv.linda.tasks.validation.TaskValidator;
 
 import java.io.File;
 
 @Configuration
-public class AppConfig extends Constant implements WebMvcConfigurer {
+public class AppConfig implements WebMvcConfigurer {
+    private final String TASKS_PATH = Constants.TasksPath();
 
     @Bean
     public TaskValidator taskValidator() {

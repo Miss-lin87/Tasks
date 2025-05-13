@@ -1,8 +1,9 @@
 package sv.linda.tasks.constructors;
 
 import jakarta.annotation.PostConstruct;
+import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.stereotype.Repository;
-import sv.linda.tasks.Constant;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.functions.GetInfo;
 
 import java.io.File;
@@ -10,8 +11,8 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 @Repository
-public class TaskDAO extends Constant{
-    private final GetInfo info = new GetInfo(new File(TASKS_PATH).listFiles());
+public class TaskDAO {
+    private final GetInfo info = new GetInfo(new File(Constants.TasksPath()).listFiles());
     private final Tasks tasks = new Tasks();
     private List<String> nameList;
 

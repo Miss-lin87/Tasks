@@ -1,18 +1,17 @@
 package sv.linda.tasks.functions;
 
 import com.google.gson.Gson;
-import sv.linda.tasks.Constant;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Task;
-
 import java.io.*;
 
-//TODO use constants and not extend them
-//TODO Inject the Path instead of using a constant
-public class SaveTask extends Constant {
+public class SaveTask {
     protected final Gson gson;
+    private String SAVE_PATH;
 
-    public SaveTask() {
+    public SaveTask(String savePath) {
         this.gson = new Gson();
+        this.SAVE_PATH = savePath;
     }
 
     public void save(Task task) throws IOException {

@@ -2,7 +2,7 @@ package sv.linda.tasks.functions;
 
 import com.google.gson.Gson;
 import lombok.Getter;
-import sv.linda.tasks.Constant;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Task;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class GetInfo extends Constant {
+public class GetInfo {
     protected File[] listOfFiles;
     protected Gson gson;
 

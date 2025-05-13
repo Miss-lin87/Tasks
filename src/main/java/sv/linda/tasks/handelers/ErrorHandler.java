@@ -5,14 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import sv.linda.tasks.Constant;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import sv.linda.tasks.Constants;
 
 @RestControllerAdvice
-class ErrorHandler extends Constant {
+class ErrorHandler {
+    private String BASIC_ERROR = Constants.BasicError();
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<String> handelIOException(HttpServletRequest request, IOException ex) {

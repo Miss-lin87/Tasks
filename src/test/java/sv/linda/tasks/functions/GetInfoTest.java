@@ -18,8 +18,6 @@ class GetInfoTest extends GetInfo {
 
     GetInfoTest() throws IOException {
         super(new File[]{});
-        this.SAVE_PATH = tempPath.toString() + "\\%s.json";
-        this.TASKS_PATH = tempPath.toString();
     }
 
     @BeforeEach
@@ -56,9 +54,9 @@ class GetInfoTest extends GetInfo {
     void makeTaskTest() throws IOException {
         Files.write(tempFile1.toPath(), content.getBytes());
         Assertions.assertAll(
-                () -> Assertions.assertTrue(makeTask(tempFile1).getClass().equals(Task.class)),
+                () -> Assertions.assertEquals(Task.class, makeTask(tempFile1).getClass()),
                 () -> Assertions.assertNotNull(makeTask(tempFile1)),
-                () -> Assertions.assertTrue(makeTask(tempFile1).getTitle().equals("test1"))
+                () -> Assertions.assertEquals("test1", makeTask(tempFile1).getTitle())
         );
     }
 }

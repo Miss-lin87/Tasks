@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import sv.linda.tasks.Constant;
-import sv.linda.tasks.constructors.ModelView;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Task;
 import sv.linda.tasks.constructors.TaskDAO;
 import sv.linda.tasks.constructors.Tasks;
@@ -26,16 +25,17 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 @RestController
-public class TaskController extends Constant implements WebMvcConfigurer {
-    private final ModelView view = new ModelView();
+public class TaskController implements WebMvcConfigurer {
     private final TaskDAO taskDAO;
     private final TaskValidator valid;
     private final String main = "redirect:/";
+    private final String SAVE_PATH;
 
     @Autowired
     public TaskController(TaskDAO taskDAO, TaskValidator valid) {
         this.taskDAO = taskDAO;
         this.valid = valid;
+        this.SAVE_PATH = Constants.SavePath();
     }
 
     @GetMapping("/all")
@@ -55,7 +55,7 @@ public class TaskController extends Constant implements WebMvcConfigurer {
 
     @GetMapping("/addTask")
     public ModelAndView loadNewTask(@Valid Task task, Errors errors) {
-        return view.page("addTask");
+        return new ModelAndView("addTask");
     }
 
     @PostMapping("/addTask")
@@ -67,13 +67,12 @@ public class TaskController extends Constant implements WebMvcConfigurer {
         } else {
             saveTask(task);
         }
-        return view.page(main);
+        return new ModelAndView(main);
     }
-
 
     @GetMapping("/")
     public ModelAndView mainPage() {
-        ModelAndView tempView = this.view.page("tasksPage");
+        ModelAndView tempView = new ModelAndView("tasksPage");
         tempView.addObject("tasks", taskDAO.getTasks().getTaskList());
         tempView.addObject("Statuses", Status.getAll());
         return tempView;
@@ -83,9 +82,9 @@ public class TaskController extends Constant implements WebMvcConfigurer {
     public ModelAndView updateTask(HttpServletRequest request) throws IOException {
         for (Task task : taskDAO.getTasks().getTaskList()) {
             task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
-            new SaveTask().save(task);
+            new SaveTask(Constants.SavePath()).save(task);
         }
-        return view.page(main);
+        return new ModelAndView(main);
     }
 
     @PostMapping("/deleteTask/{name}")
@@ -93,7 +92,7 @@ public class TaskController extends Constant implements WebMvcConfigurer {
         taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
         Path path = Path.of(SAVE_PATH.formatted(name));
         Files.delete(path);
-        return view.page("testing");
+        return new ModelAndView("testing");
     }
 
     @PostMapping("/adding")
@@ -117,7 +116,7 @@ public class TaskController extends Constant implements WebMvcConfigurer {
     }
 
     private void saveTask(Task task) throws IOException {
-        SaveTask save = new SaveTask();
+        SaveTask save = new SaveTask(Constants.SavePath());
         save.save(task);
         taskDAO.addTask(task);
     }
