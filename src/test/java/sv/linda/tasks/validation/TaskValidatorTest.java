@@ -3,9 +3,10 @@ package sv.linda.tasks.validation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
-import sv.linda.tasks.constructors.Task;
+import sv.linda.tasks.constructors.Task.Task;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +38,7 @@ class TaskValidatorTest {
 
     @Test
     void emptyDescriptionTest() {
-        task.setTitle("Test2");
+        task.setTitle("Test3");
         valid.validate(task, errors);
         Assertions.assertAll(
                 () -> Assertions.assertTrue(errors.hasFieldErrors("description")),

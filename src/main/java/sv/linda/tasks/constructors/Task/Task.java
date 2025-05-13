@@ -1,4 +1,4 @@
-package sv.linda.tasks.constructors;
+package sv.linda.tasks.constructors.Task;
 
 import lombok.Data;
 import sv.linda.tasks.enums.Status;

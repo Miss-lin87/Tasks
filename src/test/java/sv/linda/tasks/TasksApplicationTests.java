@@ -8,6 +8,7 @@ class TasksApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// TODO document why this method is empty
 	}
 
 }

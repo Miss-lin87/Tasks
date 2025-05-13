@@ -2,8 +2,7 @@ package sv.linda.tasks.validation;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import sv.linda.tasks.constructors.Task;
-import sv.linda.tasks.functions.GetInfo;
+import sv.linda.tasks.constructors.Task.Task;
 
 import java.util.List;
 

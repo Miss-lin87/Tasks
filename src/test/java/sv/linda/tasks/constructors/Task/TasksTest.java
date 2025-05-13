@@ -1,4 +1,4 @@
-package sv.linda.tasks.constructors;
+package sv.linda.tasks.constructors.Task;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
