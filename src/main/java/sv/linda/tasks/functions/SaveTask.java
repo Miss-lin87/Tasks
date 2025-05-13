@@ -1,8 +1,7 @@
 package sv.linda.tasks.functions;
 
 import com.google.gson.Gson;
-import sv.linda.tasks.Constants;
-import sv.linda.tasks.constructors.Task;
+import sv.linda.tasks.constructors.Task.Task;
 import java.io.*;
 
 public class SaveTask {

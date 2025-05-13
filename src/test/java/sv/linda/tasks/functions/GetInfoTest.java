@@ -3,7 +3,7 @@ package sv.linda.tasks.functions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sv.linda.tasks.constructors.Task;
+import sv.linda.tasks.constructors.Task.Task;
 
 import java.io.File;
 import java.io.IOException;

@@ -12,11 +12,15 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import sv.linda.tasks.Constants;
-import sv.linda.tasks.constructors.Task;
-import sv.linda.tasks.constructors.TaskDAO;
-import sv.linda.tasks.constructors.Tasks;
+import sv.linda.tasks.constructors.Login.Login;
+import sv.linda.tasks.constructors.Login.LoginDAO;
+import sv.linda.tasks.constructors.Login.Logins;
+import sv.linda.tasks.constructors.Task.Task;
+import sv.linda.tasks.constructors.Task.TaskDAO;
+import sv.linda.tasks.constructors.Task.Tasks;
 import sv.linda.tasks.enums.Status;
 import sv.linda.tasks.functions.SaveTask;
+import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 import java.io.IOException;
 import java.net.URI;
@@ -27,14 +31,18 @@ import java.util.Objects;
 @RestController
 public class TaskController implements WebMvcConfigurer {
     private final TaskDAO taskDAO;
-    private final TaskValidator valid;
+    private final LoginDAO loginDAO;
+    private final TaskValidator taskValidator;
+    private final LoginValidator loginValidator;
     private final String main = "redirect:/";
     private final String SAVE_PATH;
 
     @Autowired
-    public TaskController(TaskDAO taskDAO, TaskValidator valid) {
+    public TaskController(TaskDAO taskDAO, LoginDAO loginDAO, TaskValidator valid, LoginValidator loginValidator) {
         this.taskDAO = taskDAO;
-        this.valid = valid;
+        this.loginDAO = loginDAO;
+        this.taskValidator = valid;
+        this.loginValidator = loginValidator;
         this.SAVE_PATH = Constants.SavePath();
     }
 
@@ -61,9 +69,9 @@ public class TaskController implements WebMvcConfigurer {
     @PostMapping("/addTask")
     public ModelAndView newTask(Task task, BindingResult bind) throws IOException {
         Errors errors = new BeanPropertyBindingResult(task, "task");
-        valid.validate(task, errors);
+        taskValidator.validate(task, errors);
         if (errors.hasErrors()) {
-            return setErrors(errors);
+            return setTaskErrors(errors);
         } else {
             saveTask(task);
         }
@@ -95,6 +103,22 @@ public class TaskController implements WebMvcConfigurer {
         return new ModelAndView("testing");
     }
 
+    @GetMapping("/login")
+    public ModelAndView loadLoginPage(@Valid Login login, Errors errors) {
+        return new ModelAndView("loginPage");
+    }
+
+    @PostMapping("/login")
+    public ModelAndView login(Login login, BindingResult bind) {
+        Errors error = new BeanPropertyBindingResult(login, "logins");
+        loginValidator.validate(login, error);
+        if (!error.hasErrors()) {
+            return new ModelAndView(main);
+        } else {
+            return setLoginErrors(error);
+        }
+    }
+
     @PostMapping("/adding")
     public ResponseEntity<Object> addTasks(@RequestParam Task task) {
         taskDAO.addTask(task);
@@ -106,12 +130,21 @@ public class TaskController implements WebMvcConfigurer {
         return ResponseEntity.created(location).build();
     }
 
-    private ModelAndView setErrors(Errors errors) {
+    private ModelAndView setTaskErrors(Errors errors) {
         ModelAndView tempView = new ModelAndView("addTask");
         String nameError = (errors.getFieldError("title") != null) ? Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage() : "";
         String descriptionError = (errors.getFieldError("description") != null) ? Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage() : "";
         tempView.addObject("nameError", nameError);
         tempView.addObject("descriptionError", descriptionError);
+        return tempView;
+    }
+
+    private ModelAndView setLoginErrors(Errors errors) {
+        ModelAndView tempView = new ModelAndView("loginPage");
+        String usernameError = (errors.getFieldError("username") != null) ? Objects.requireNonNull(errors.getFieldError("username")).getDefaultMessage() : "";
+        String passwordError = (errors.getFieldError("password") != null) ? Objects.requireNonNull(errors.getFieldError("password")).getDefaultMessage() : "";
+        tempView.addObject("usernameError", usernameError);
+        tempView.addObject("passwordError", passwordError);
         return tempView;
     }
 

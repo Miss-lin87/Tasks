@@ -1,4 +1,4 @@
-package sv.linda.tasks.constructors;
+package sv.linda.tasks.constructors.Task;
 
 import lombok.Setter;
 import java.util.ArrayList;

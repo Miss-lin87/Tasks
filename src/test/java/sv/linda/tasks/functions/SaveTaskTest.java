@@ -2,10 +2,8 @@ package sv.linda.tasks.functions;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
-import sv.linda.tasks.constructors.Task;
+import sv.linda.tasks.constructors.Task.Task;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

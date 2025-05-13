@@ -2,8 +2,8 @@ package sv.linda.tasks.functions;
 
 import com.google.gson.Gson;
 import lombok.Getter;
-import sv.linda.tasks.Constants;
-import sv.linda.tasks.constructors.Task;
+import sv.linda.tasks.constructors.Login.Login;
+import sv.linda.tasks.constructors.Task.Task;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,6 +26,20 @@ public class GetInfo {
         return gson.fromJson(read, Task.class);
     }
 
+    protected Login makeLogin(File file) throws FileNotFoundException {
+        Reader read = new FileReader(file);
+        return gson.fromJson(read, Login.class);
+    }
+
+    public Login toLogin(String title) throws FileNotFoundException {
+        for (File F : listOfFiles) {
+            if (F.getName().equals(title + ".json")) {
+                return makeLogin(F);
+            }
+        }
+        return null;
+    }
+
     public Task toTask(String title) throws FileNotFoundException {
         for (File F : listOfFiles) {
             if (F.getName().equals(title + ".json")) {
@@ -33,6 +47,19 @@ public class GetInfo {
             }
         }
         return null;
+    }
+
+    public List<Login> getLogins() {
+        ArrayList<Login> logins = new ArrayList<>();
+        for (File file : this.listOfFiles) {
+            if (file.isFile()) {
+                try {
+                    logins.add(makeLogin(file));
+                } catch (FileNotFoundException ignored) {
+                }
+            }
+        }
+        return logins;
     }
 
     public List<String> getTasks() {
