@@ -1,14 +1,12 @@
 package sv.linda.tasks.constructors;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import sv.linda.tasks.enums.Status;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class Task {
     private String title;
     private String description;

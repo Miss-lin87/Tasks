@@ -6,77 +6,77 @@ import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.constructors.Task;
+
+import java.util.List;
 import java.util.Objects;
 
 class TaskValidatorTest {
     private TaskValidator valid;
     private Task task;
+    private Errors errors;
 
     @BeforeEach
     void setUp() {
-        valid = new TaskValidator() {
-            @Override
-            public void validate(Object task, Errors error) {
-                super.nameList.clear();
-                super.nameList.add("Test1");
-                super.validate(task, error);
-            }
-        };
+        List<String> nameList = List.of("Test1", "Test2");
+        valid = new TaskValidator(nameList);
         task = new Task();
+        errors = new BeanPropertyBindingResult(task, "task");
     }
 
     @Test
     void emptyNameTest() {
         task.setTitle("");
         task.setDescription("This is just for a test");
-        Errors error = new BeanPropertyBindingResult(task, "task");
-        valid.validate(task, error);
-
-        Assertions.assertTrue(error.hasFieldErrors("title"));
-        Assertions.assertEquals("You need to enter a name", Objects.requireNonNull(error.getFieldError("title")).getDefaultMessage());
-        Assertions.assertFalse(error.hasFieldErrors("description"));
+        valid.validate(task, errors);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(errors.hasFieldErrors("title")),
+                () -> Assertions.assertEquals("You need to enter a name", Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage()),
+                () -> Assertions.assertFalse(errors.hasFieldErrors("description"))
+        );
     }
 
     @Test
     void emptyDescriptionTest() {
         task.setTitle("Test2");
-        Errors error = new BeanPropertyBindingResult(task, "task");
-        valid.validate(task, error);
-
-        Assertions.assertTrue(error.hasFieldErrors("description"));
-        Assertions.assertEquals("You need a description", Objects.requireNonNull(error.getFieldError("description")).getDefaultMessage());
-        Assertions.assertFalse(error.hasFieldErrors("title"));
+        valid.validate(task, errors);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(errors.hasFieldErrors("description")),
+                () -> Assertions.assertEquals("You need a description", Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage()),
+                () -> Assertions.assertFalse(errors.hasFieldErrors("title"))
+        );
     }
 
     @Test
     void fullEmptyTest() {
-        Errors error = new BeanPropertyBindingResult(task, "task");
-        valid.validate(task, error);
-
-        Assertions.assertTrue(error.hasFieldErrors("title"));
-        Assertions.assertTrue(error.hasFieldErrors("description"));
+        valid.validate(task, errors);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(errors.hasFieldErrors("title")),
+                () -> Assertions.assertTrue(errors.hasFieldErrors("description")),
+                () -> Assertions.assertFalse(errors.getAllErrors().isEmpty())
+        );
     }
 
     @Test
     void shortDescriptionTest() {
         task.setTitle("Test2");
         task.setDescription("test");
-        Errors error = new BeanPropertyBindingResult(task, "task");
-        valid.validate(task, error);
-
-        Assertions.assertTrue(error.hasFieldErrors("description"));
-        Assertions.assertEquals("Description is too short. Minimum 10 characters", Objects.requireNonNull(error.getFieldError("description")).getDefaultMessage());
+        valid.validate(task, errors);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(errors.hasFieldErrors("description")),
+                () -> Assertions.assertEquals("Description is too short. Minimum 10 characters", Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage()),
+                () -> Assertions.assertFalse(errors.getAllErrors().isEmpty())
+        );
     }
 
     @Test
     void nameAlreadyExistsTest() {
         task.setTitle("Test1");
         task.setDescription("This is just for a test");
-        Errors error = new BeanPropertyBindingResult(task, "task");
-        valid.validate(task, error);
-
-        Assertions.assertTrue(error.hasFieldErrors("title"));
-        Assertions.assertEquals("That task name is in use", Objects.requireNonNull(error.getFieldError("title")).getDefaultMessage());
-        Assertions.assertFalse(error.hasFieldErrors("description"));
+        valid.validate(task, errors);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(errors.hasFieldErrors("title")),
+                () -> Assertions.assertEquals("That task name is in use", Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage()),
+                () -> Assertions.assertFalse(errors.hasFieldErrors("description"))
+        );
     }
 }
