@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-class SaveTaskTest {
+class SaveTest {
     Path tempPath = Files.createTempDirectory("testDir");
-    SaveTask save;
+    Save save;
 
-    SaveTaskTest() throws IOException {
-        save = new SaveTask(tempPath.toString() + "/%s.json");
+    SaveTest() throws IOException {
+        save = new Save(tempPath.toString() + "/%s.json");
         tempPath.toFile().deleteOnExit();
     }
 

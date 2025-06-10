@@ -14,12 +14,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Login.LoginDAO;
-import sv.linda.tasks.constructors.Login.Logins;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.constructors.Task.TaskDAO;
 import sv.linda.tasks.constructors.Task.Tasks;
 import sv.linda.tasks.enums.Status;
-import sv.linda.tasks.functions.SaveTask;
+import sv.linda.tasks.functions.Save;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 import java.io.IOException;
@@ -90,7 +89,7 @@ public class TaskController implements WebMvcConfigurer {
     public ModelAndView updateTask(HttpServletRequest request) throws IOException {
         for (Task task : taskDAO.getTasks().getTaskList()) {
             task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
-            new SaveTask(Constants.SavePath()).save(task);
+            new Save().save(task);
         }
         return new ModelAndView(main);
     }
@@ -149,8 +148,7 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     private void saveTask(Task task) throws IOException {
-        SaveTask save = new SaveTask(Constants.SavePath());
-        save.save(task);
+        new Save().save(task);
         taskDAO.addTask(task);
     }
 }

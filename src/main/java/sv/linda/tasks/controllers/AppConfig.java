@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
-import sv.linda.tasks.functions.GetInfo;
+import sv.linda.tasks.database.DataBaseFunctions;
+import sv.linda.tasks.functions.Converter;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 
@@ -14,11 +15,13 @@ import java.util.List;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
+    private final DataBaseFunctions databse = new DataBaseFunctions("mongodb://localhost:27017/", "Tasks");
+    private final Converter convert = new Converter();
     private final String TASKS_PATH = Constants.TasksPath();
 
     @Bean
     public TaskValidator taskValidator() {
-        return new TaskValidator(new GetInfo(new File(TASKS_PATH).listFiles()).getTasks());
+        return new TaskValidator(convert.getTasksNames(databse.getAllData("SavedTasks")));
     }
 
     @Bean
