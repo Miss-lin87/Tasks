@@ -15,9 +15,8 @@ import java.util.List;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
-    private final DataBaseFunctions databse = new DataBaseFunctions("mongodb://localhost:27017/", "Tasks");
+    private final DataBaseFunctions databse = Constants.Database();
     private final Converter convert = new Converter();
-    private final String TASKS_PATH = Constants.TasksPath();
 
     @Bean
     public TaskValidator taskValidator() {

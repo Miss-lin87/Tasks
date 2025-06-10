@@ -17,6 +17,7 @@ import sv.linda.tasks.constructors.Login.LoginDAO;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.constructors.Task.TaskDAO;
 import sv.linda.tasks.constructors.Task.Tasks;
+import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.enums.Status;
 import sv.linda.tasks.functions.Save;
 import sv.linda.tasks.validation.LoginValidator;
@@ -34,7 +35,7 @@ public class TaskController implements WebMvcConfigurer {
     private final TaskValidator taskValidator;
     private final LoginValidator loginValidator;
     private final String main = "redirect:/";
-    private final String SAVE_PATH;
+    private final DataBaseFunctions database;
 
     @Autowired
     public TaskController(TaskDAO taskDAO, LoginDAO loginDAO, TaskValidator valid, LoginValidator loginValidator) {
@@ -42,7 +43,7 @@ public class TaskController implements WebMvcConfigurer {
         this.loginDAO = loginDAO;
         this.taskValidator = valid;
         this.loginValidator = loginValidator;
-        this.SAVE_PATH = Constants.SavePath();
+        this.database = Constants.Database();
     }
 
     @GetMapping("/all")
@@ -97,9 +98,8 @@ public class TaskController implements WebMvcConfigurer {
     @PostMapping("/deleteTask/{name}")
     public ModelAndView deleteTask(@PathVariable String name) throws IOException {
         taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
-        Path path = Path.of(SAVE_PATH.formatted(name));
-        Files.delete(path);
-        return new ModelAndView("testing");
+        database.deleteOne(name,"SavedTasks");
+        return new ModelAndView(main);
     }
 
     @GetMapping("/login")

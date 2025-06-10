@@ -21,7 +21,11 @@ public class Save {
 
     private void SaveTask(Task task) {
         Document doc = Document.parse(gson.toJson(task));
-        database.addOne(doc, "SavedTasks");
+        if (database.findOne(doc, "SavedTasks")) {
+            database.uppdateOne(doc, "SavedTasks");
+        } else {
+            database.addOne(doc, "SavedTasks");
+        }
     }
 
     private void SaveLogin(Login login) {

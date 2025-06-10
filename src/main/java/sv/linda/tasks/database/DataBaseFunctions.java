@@ -29,12 +29,37 @@ public class DataBaseFunctions {
         collection.insertOne(data);
     }
 
-    public MongoCollection<Document> getAllData(String collection) {
-        return database.getCollection(collection);
+    public void uppdateOne(Document data, String collectionName) {
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        for (Document doc : collection.find()) {
+            if (doc.getString("title").equals(data.getString("title"))) {
+                collection.replaceOne(doc, data);
+                return;
+            }
+        }
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        DataBaseFunctions database = new DataBaseFunctions("mongodb://localhost:27017/", "Tasks");
-        MongoCollection<Document> collection = database.database.getCollection("SavedTasks");
+    public boolean findOne(Document data, String collectionName) {
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        for (Document doc : collection.find()) {
+            if (doc.getString("title").equals(data.getString("title"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void deleteOne(String name, String collectionName) {
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        for (Document doc : collection.find()) {
+            if (doc.getString("title").equals(name)) {
+                collection.deleteOne(doc);
+                return;
+            }
+        }
+    }
+
+    public MongoCollection<Document> getAllData(String collection) {
+        return database.getCollection(collection);
     }
 }

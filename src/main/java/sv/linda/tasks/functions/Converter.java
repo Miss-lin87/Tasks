@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import lombok.Getter;
 import org.bson.Document;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Task.Task;
+import sv.linda.tasks.database.DataBaseFunctions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,9 +19,11 @@ import java.util.List;
 @Getter
 public class Converter {
     protected Gson gson;
+    protected DataBaseFunctions database;
 
     public Converter() {
         gson = new Gson();
+        database = Constants.Database();
     }
 
     protected Task makeTask(File file) throws FileNotFoundException {
