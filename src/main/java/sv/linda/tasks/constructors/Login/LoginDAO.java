@@ -2,10 +2,7 @@ package sv.linda.tasks.constructors.Login;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
-import sv.linda.tasks.Constants;
-import sv.linda.tasks.functions.GetInfo;
 
-import java.io.File;
 import java.util.List;
 
 @Repository
@@ -22,7 +19,7 @@ public class LoginDAO {
         return logins;
     }
 
-    public void addTask(Login login) {
+    public void addLogin(Login login) {
         logins.getLoginList().add(login);
     }
 }

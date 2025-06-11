@@ -1,27 +1,22 @@
 package sv.linda.tasks.constructors.Task;
 
 import jakarta.annotation.PostConstruct;
+import org.bson.Document;
 import org.springframework.stereotype.Repository;
 import sv.linda.tasks.Constants;
-import sv.linda.tasks.functions.GetInfo;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.List;
+import sv.linda.tasks.database.DataBaseFunctions;
+import sv.linda.tasks.functions.Converter;
 
 @Repository
-public class TaskDAO {
-    private final GetInfo info = new GetInfo(new File(Constants.TasksPath()).listFiles());
+public class TaskDAO implements Constants {
+    private final Converter convert = new Converter();
     private final Tasks tasks = new Tasks();
-    private List<String> nameList;
 
     @PostConstruct
     public void init() {
-        nameList = info.getTasks();
-        for (String name : nameList) {
-            try {
-                tasks.getTaskList().add(info.toTask(name));
-            } catch (FileNotFoundException ignored) {
-            }
+        for (Document doc : database.getAllData("SavedTasks").find()) {
+            Task task = convert.toTask(doc);
+            tasks.getTaskList().add(task);
         }
     }
 

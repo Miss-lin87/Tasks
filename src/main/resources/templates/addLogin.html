@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New User</title>
+</head>
+<body>
+    <label>Create new Login</label>
+
+    <form action="#" th:action="@{/addLogin}" th:object="${login}" method="POST">
+        <table>
+                <td>User Name: </td>
+                <td><input type="text" th:field="*{username}"></td>
+                <td th:text="${usernameError}"></td>
+            <tr>
+                <td>Password: </td>
+                <td><input type="password" th:field="*{password}"></td>
+                <td th:text="${passwordError}"></td>
+            </tr>
+        </table>
+        <button type="submit" onclick="Confirm()">Create Login</button>
+    </form>
+<script>
+    function confirm() {
+        alert("The new user has been created successfully!");
+    }
+</script>
+</body>
+</html>

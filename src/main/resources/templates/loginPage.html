@@ -2,32 +2,45 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login Page</title>
 </head>
 <body>
-<label>Welcome. Please log in to se tasks</label>
+<label>Welcome</label>
+<br><td>Please log in to se tasks</td>
 
 <form action="#" th:action="@{/login}" th:object="${login}" method="POST">
     <table>
         <td>Username: </td>
-        <td><input type="text" th:field="*{username}"></td>
+        <td><label><input type="text" th:field="*{username}">
+        </label></td>
         <td th:text="${usernameError}"></td>
         <tr>
             <td>Password: </td>
-            <td><input id="passwordField" type="password" th:field="*{password}"></td>
-            <td><input type="checkbox" onclick="showPassword()"></td>
+            <td>
+                <label for="passwordField"></label>
+                <input type="password" id="passwordField" th:field="*{password}">
+            </td>
+            <td>
+                <label>
+                <input type="checkbox" onclick="showPassword()">
+                </label>
+            </td>
             <td th:text="${passwordError}"></td>
         </tr>
     </table>
     <button type="submit">Login</button>
+    <td>
+        <button th:formaction="@{/addLogin}" formmethod="GET">New User</button>
+    </td>
 </form>
 <script>
     function showPassword() {
-    var showPassword = document.getElementById("passwordField");
-    if (showPassword.type === "password") {
-        passwordField.type = "text";
-    } else {
-        passwordField.type = "password";
+    var Pass = document.getElementById("passwordField");
+        if (Pass.type === "password") {
+            Pass.type = "text";
+        } else {
+            Pass.type = "password";
+        }
     }
 </script>
 </body>
