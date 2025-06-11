@@ -9,6 +9,7 @@ import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Login.LoginDAO;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.constructors.Task.TaskDAO;
+import sv.linda.tasks.validation.CreateLoginValidator;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 import java.util.List;
@@ -24,11 +25,12 @@ class ControllerTest {
     private final MockMvc mvc;
     private TaskValidator valid = new TaskValidator(List.of("Test1", "Test2"));
     private LoginValidator loginValid = new LoginValidator(List.of(new Login(), new Login()));
+    private CreateLoginValidator createloginvalid = new CreateLoginValidator(List.of(new Login(), new Login()));
 
     ControllerTest() {
         this.taskDAO = new TaskDAO();
         this.loginDAO = new LoginDAO();
-        this.controller = new TaskController(taskDAO, loginDAO, valid, loginValid);
+        this.controller = new TaskController(taskDAO, loginDAO, valid, loginValid, createloginvalid);
         this.mvc = MockMvcBuilders
                 .standaloneSetup(controller)
                 .setValidator(valid)

@@ -7,6 +7,7 @@ import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.functions.Converter;
+import sv.linda.tasks.validation.CreateLoginValidator;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 
@@ -24,5 +25,10 @@ public class AppConfig implements WebMvcConfigurer, Constants {
     @Bean
     public LoginValidator loginValidator() {
         return new LoginValidator(convert.getLogins(database.getAllData("Logins")));
+    }
+
+    @Bean
+    public CreateLoginValidator createLoginValidator() {
+        return new CreateLoginValidator(convert.getLogins(database.getAllData("Logins")));
     }
 }
