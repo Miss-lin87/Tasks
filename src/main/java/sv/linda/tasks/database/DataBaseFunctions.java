@@ -5,7 +5,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import java.io.FileNotFoundException;
+
 import java.util.List;
 
 public class DataBaseFunctions {
@@ -29,7 +29,7 @@ public class DataBaseFunctions {
         collection.insertOne(data);
     }
 
-    public void uppdateOne(Document data, String collectionName) {
+    public void updateOne(Document data, String collectionName) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         for (Document doc : collection.find()) {
             if (doc.getString("title").equals(data.getString("title"))) {

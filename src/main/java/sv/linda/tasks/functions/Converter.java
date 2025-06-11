@@ -17,13 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class Converter {
+public class Converter implements Constants {
     protected Gson gson;
-    protected DataBaseFunctions database;
 
     public Converter() {
         gson = new Gson();
-        database = Constants.Database();
     }
 
     protected Task makeTask(File file) throws FileNotFoundException {
@@ -47,5 +45,14 @@ public class Converter {
             tasks.add(task.getTitle());
         }
         return tasks;
+    }
+
+    public List<Login> getLogins(MongoCollection<Document> collection) {
+        ArrayList<Login> logins = new ArrayList<>();
+        for (Document doc : collection.find()) {
+            Login login = gson.fromJson(doc.toJson(), Login.class);
+            logins.add(login);
+        }
+        return logins;
     }
 }

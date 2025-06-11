@@ -10,21 +10,19 @@ import sv.linda.tasks.functions.Converter;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 
-import java.io.File;
 import java.util.List;
 
 @Configuration
-public class AppConfig implements WebMvcConfigurer {
-    private final DataBaseFunctions databse = Constants.Database();
+public class AppConfig implements WebMvcConfigurer, Constants {
     private final Converter convert = new Converter();
 
     @Bean
     public TaskValidator taskValidator() {
-        return new TaskValidator(convert.getTasksNames(databse.getAllData("SavedTasks")));
+        return new TaskValidator(convert.getTasksNames(database.getAllData("SavedTasks")));
     }
 
     @Bean
     public LoginValidator loginValidator() {
-        return new LoginValidator(List.of(new Login("admin", "admin"), new Login("user", "user")));
+        return new LoginValidator(convert.getLogins(database.getAllData("Logins")));
     }
 }

@@ -12,8 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import sv.linda.tasks.Constants;
 
 @RestControllerAdvice
-class ErrorHandler {
-    private String BASIC_ERROR = Constants.BasicError();
+class ErrorHandler implements Constants{
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<String> handelIOException(HttpServletRequest request, IOException ex) {

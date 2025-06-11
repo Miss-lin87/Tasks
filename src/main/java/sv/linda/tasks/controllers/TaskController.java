@@ -17,25 +17,20 @@ import sv.linda.tasks.constructors.Login.LoginDAO;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.constructors.Task.TaskDAO;
 import sv.linda.tasks.constructors.Task.Tasks;
-import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.enums.Status;
 import sv.linda.tasks.functions.Save;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
-import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Objects;
 
 @RestController
-public class TaskController implements WebMvcConfigurer {
+public class TaskController implements WebMvcConfigurer, Constants {
     private final TaskDAO taskDAO;
     private final LoginDAO loginDAO;
     private final TaskValidator taskValidator;
     private final LoginValidator loginValidator;
-    private final String main = "redirect:/";
-    private final DataBaseFunctions database;
+    private final String main = "redirect:/main";
 
     @Autowired
     public TaskController(TaskDAO taskDAO, LoginDAO loginDAO, TaskValidator valid, LoginValidator loginValidator) {
@@ -43,7 +38,6 @@ public class TaskController implements WebMvcConfigurer {
         this.loginDAO = loginDAO;
         this.taskValidator = valid;
         this.loginValidator = loginValidator;
-        this.database = Constants.Database();
     }
 
     @GetMapping("/all")
@@ -67,7 +61,7 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     @PostMapping("/addTask")
-    public ModelAndView newTask(Task task, BindingResult bind) throws IOException {
+    public ModelAndView newTask(Task task, BindingResult bind) {
         Errors errors = new BeanPropertyBindingResult(task, "task");
         taskValidator.validate(task, errors);
         if (errors.hasErrors()) {
@@ -78,7 +72,24 @@ public class TaskController implements WebMvcConfigurer {
         return new ModelAndView(main);
     }
 
-    @GetMapping("/")
+    @GetMapping("/addLogin")
+    public ModelAndView newLogin(@Valid Login login, Errors errors) {
+        return new ModelAndView("addLogin");
+    }
+
+    @PostMapping("/addLogin")
+    public ModelAndView addLogin(Login login, BindingResult bind) {
+        Errors errors = new BeanPropertyBindingResult(login, "login");
+        loginValidator.validate(login, errors);
+        if (errors.hasErrors()) {
+            return setLoginErrors(errors);
+        } else {
+            saveLogin(login);
+        }
+        return new ModelAndView("loginPage");
+    }
+
+    @GetMapping("/main")
     public ModelAndView mainPage() {
         ModelAndView tempView = new ModelAndView("tasksPage");
         tempView.addObject("tasks", taskDAO.getTasks().getTaskList());
@@ -87,7 +98,7 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     @PostMapping("/updateTask")
-    public ModelAndView updateTask(HttpServletRequest request) throws IOException {
+    public ModelAndView updateTask(HttpServletRequest request) {
         for (Task task : taskDAO.getTasks().getTaskList()) {
             task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
             new Save().save(task);
@@ -96,27 +107,29 @@ public class TaskController implements WebMvcConfigurer {
     }
 
     @PostMapping("/deleteTask/{name}")
-    public ModelAndView deleteTask(@PathVariable String name) throws IOException {
+    public ModelAndView deleteTask(@PathVariable String name) {
         taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
         database.deleteOne(name,"SavedTasks");
         return new ModelAndView(main);
     }
 
-    @GetMapping("/login")
+    @GetMapping("/")
     public ModelAndView loadLoginPage(@Valid Login login, Errors errors) {
         return new ModelAndView("loginPage");
     }
 
     @PostMapping("/login")
     public ModelAndView login(Login login, BindingResult bind) {
-        Errors error = new BeanPropertyBindingResult(login, "logins");
-        loginValidator.validate(login, error);
-        if (!error.hasErrors()) {
-            return new ModelAndView(main);
+        Errors errors = new BeanPropertyBindingResult(login, "login");
+        loginValidator.validate(login, errors);
+        if (errors.hasErrors()) {
+            return setLoginErrors(errors);
         } else {
-            return setLoginErrors(error);
+            saveLogin(login);
         }
+        return new ModelAndView(main);
     }
+
 
     @PostMapping("/adding")
     public ResponseEntity<Object> addTasks(@RequestParam Task task) {
@@ -147,8 +160,13 @@ public class TaskController implements WebMvcConfigurer {
         return tempView;
     }
 
-    private void saveTask(Task task) throws IOException {
+    private void saveTask(Task task) {
         new Save().save(task);
         taskDAO.addTask(task);
+    }
+
+    private void saveLogin(Login login) {
+        new Save().save(login);
+        loginDAO.addLogin(login);
     }
 }

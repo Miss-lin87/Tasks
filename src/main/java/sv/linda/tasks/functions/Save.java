@@ -5,24 +5,18 @@ import org.bson.Document;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Task.Task;
-import sv.linda.tasks.database.DataBaseFunctions;
 
-import javax.print.Doc;
-import java.io.*;
-
-public class Save {
+public class Save implements Constants {
     protected final Gson gson;
-    private final DataBaseFunctions database;
 
     public Save() {
         gson = new Gson();
-        database = Constants.Database();
     }
 
     private void SaveTask(Task task) {
         Document doc = Document.parse(gson.toJson(task));
         if (database.findOne(doc, "SavedTasks")) {
-            database.uppdateOne(doc, "SavedTasks");
+            database.updateOne(doc, "SavedTasks");
         } else {
             database.addOne(doc, "SavedTasks");
         }
@@ -30,14 +24,18 @@ public class Save {
 
     private void SaveLogin(Login login) {
         Document doc = Document.parse(gson.toJson(login));
-        database.addOne(doc, "Logins");
+        if (database.findOne(doc, "Logins")) {
+            database.updateOne(doc, "Logins");
+        } else {
+            database.addOne(doc, "Logins");
+        }
     }
 
-    public <T> void save(T data) throws IOException {
-        if (data instanceof Task) {
-            SaveTask((Task) data);
-        } else {
-            throw new IllegalArgumentException("Unsupported data type");
+    public <T> void save(T data) {
+        switch (data) {
+            case Task task -> SaveTask(task);
+            case Login login -> SaveLogin(login);
+            default -> throw new IllegalArgumentException("Unsupported data type");
         }
     }
 }
