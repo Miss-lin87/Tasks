@@ -8,5 +8,6 @@ public interface ViewPages {
     ModelAndView NEWTASK = new ModelAndView("addTask");
     ModelAndView LOGIN = new ModelAndView("loginPage");
     ModelAndView MAIN = new ModelAndView("tasksPage");
+    ModelAndView REDIRECT_MAIN = new ModelAndView("redirect:/main");
     ModelAndView ERROR = new ModelAndView("error");
 }

@@ -6,6 +6,7 @@ import org.springframework.validation.Validator;
 import sv.linda.tasks.constructors.Login.Login;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class CreateLoginValidator implements Validator {
     private final List<Login> logins;
@@ -41,8 +42,10 @@ public class CreateLoginValidator implements Validator {
     private void validatePassword (Login login, Errors errors) {
         if (login.getPassword() == null || login.getPassword().trim().isEmpty()) {
             errors.rejectValue("password", "password.empty", "You need to enter a password");
-        } if (login.getPassword().length() < 6) {
+        } else if (login.getPassword().length() < 6) {
             errors.rejectValue("password", "password.too.short", "Password must be at least 6 characters long");
+        } else if (!Pattern.compile("[a-zA-Z]").matcher(login.getPassword()).find() || !Pattern.compile("[0-9]").matcher(login.getPassword()).find()) {
+            errors.rejectValue("password", "password.weak", "Password must contain letter and numbers");
         }
     }
 

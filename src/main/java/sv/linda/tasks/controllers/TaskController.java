@@ -71,7 +71,7 @@ public class TaskController implements WebMvcConfigurer, Constants, ViewPages {
         } else {
             saveTask(task);
         }
-        return MAIN;
+        return REDIRECT_MAIN;
     }
 
     @GetMapping("/addLogin")
@@ -81,7 +81,6 @@ public class TaskController implements WebMvcConfigurer, Constants, ViewPages {
 
     @PostMapping("/addLogin")
     public ModelAndView addLogin(Login login, BindingResult bind) {
-        System.out.println(login.getUsername() + "|" + login.getPassword());
         Errors errors = new BeanPropertyBindingResult(login, "login");
         createLoginValidator.validate(login, errors);
         if (errors.hasErrors()) {
@@ -98,14 +97,14 @@ public class TaskController implements WebMvcConfigurer, Constants, ViewPages {
             task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
             new Save().save(task);
         }
-        return MAIN;
+        return REDIRECT_MAIN;
     }
 
     @PostMapping("/deleteTask/{name}")
     public ModelAndView deleteTask(@PathVariable String name) {
         taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
         database.deleteOne(name,"SavedTasks");
-        return MAIN;
+        return REDIRECT_MAIN;
     }
 
     @GetMapping("/main")
@@ -128,7 +127,7 @@ public class TaskController implements WebMvcConfigurer, Constants, ViewPages {
         if (errors.hasErrors()) {
             return setLoginErrors(errors);
         }
-        return MAIN;
+        return REDIRECT_MAIN;
     }
 
 
