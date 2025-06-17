@@ -34,6 +34,10 @@ public class Converter implements Constants {
         return gson.fromJson(read, Login.class);
     }
 
+    public Login toLogin(Document doc) {
+        return gson.fromJson(doc.toJson(), Login.class);
+    }
+
     public Task toTask(Document doc) {
         return gson.fromJson(doc.toJson(), Task.class);
     }

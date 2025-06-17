@@ -1,6 +1,5 @@
 package sv.linda.tasks.controllers;
 
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 public interface ViewPages {

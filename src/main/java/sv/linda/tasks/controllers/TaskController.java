@@ -103,7 +103,7 @@ public class TaskController implements WebMvcConfigurer, Constants, ViewPages {
     @PostMapping("/deleteTask/{name}")
     public ModelAndView deleteTask(@PathVariable String name) {
         taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
-        database.deleteOne(name,"SavedTasks");
+        database.deleteOne(name,TASKS);
         return REDIRECT_MAIN;
     }
 

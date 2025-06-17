@@ -4,7 +4,6 @@ import jakarta.annotation.PostConstruct;
 import org.bson.Document;
 import org.springframework.stereotype.Repository;
 import sv.linda.tasks.Constants;
-import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.functions.Converter;
 
 @Repository
@@ -14,7 +13,7 @@ public class TaskDAO implements Constants {
 
     @PostConstruct
     public void init() {
-        for (Document doc : database.getAllData("SavedTasks").find()) {
+        for (Document doc : database.getAllData(TASKS).find()) {
             Task task = convert.toTask(doc);
             tasks.getTaskList().add(task);
         }

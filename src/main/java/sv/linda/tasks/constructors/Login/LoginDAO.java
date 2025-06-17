@@ -1,18 +1,22 @@
 package sv.linda.tasks.constructors.Login;
 
 import jakarta.annotation.PostConstruct;
+import org.bson.Document;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import sv.linda.tasks.Constants;
+import sv.linda.tasks.functions.Converter;
 
 @Repository
-public class LoginDAO {
+public class LoginDAO implements Constants {
     private final Logins logins = new Logins();
-    private List<Login> loginList;
+    private final Converter convert = new Converter();
 
     @PostConstruct
     public void init() {
-        loginList = List.of(new Login("admin", "admin"), new Login("user", "user"));
+        for (Document doc : database.getAllData(USERS).find()) {
+            Login login = convert.toLogin(doc);
+            logins.getLoginList().add(login);
+        }
     }
 
     public Logins getLogins() {
