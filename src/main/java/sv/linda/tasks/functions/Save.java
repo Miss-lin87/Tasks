@@ -5,12 +5,15 @@ import org.bson.Document;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Task.Task;
+import sv.linda.tasks.database.DataBaseFunctions;
 
 public class Save implements Constants {
     protected final Gson gson;
+    protected DataBaseFunctions database;
 
-    public Save() {
-        gson = new Gson();
+    public Save(DataBaseFunctions database) {
+        this.gson = new Gson();
+        this.database = database;
     }
 
     private void SaveTask(Task task) {

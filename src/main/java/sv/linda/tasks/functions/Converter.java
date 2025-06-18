@@ -24,16 +24,6 @@ public class Converter implements Constants {
         gson = new Gson();
     }
 
-    protected Task makeTask(File file) throws FileNotFoundException {
-        Reader read = new FileReader(file);
-        return gson.fromJson(read, Task.class);
-    }
-
-    protected Login makeLogin(File file) throws FileNotFoundException {
-        Reader read = new FileReader(file);
-        return gson.fromJson(read, Login.class);
-    }
-
     public Login toLogin(Document doc) {
         return gson.fromJson(doc.toJson(), Login.class);
     }

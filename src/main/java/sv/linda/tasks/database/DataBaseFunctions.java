@@ -9,7 +9,7 @@ import org.bson.Document;
 import java.util.List;
 
 public class DataBaseFunctions {
-    private final MongoDatabase database;
+    protected MongoDatabase database;
 
     public DataBaseFunctions(String URI, String database) {
         MongoClient client = MongoClients.create(URI);

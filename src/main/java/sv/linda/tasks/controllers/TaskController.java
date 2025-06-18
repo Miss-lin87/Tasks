@@ -95,7 +95,7 @@ public class TaskController implements WebMvcConfigurer, Constants, ViewPages {
     public ModelAndView updateTask(HttpServletRequest request) {
         for (Task task : taskDAO.getTasks().getTaskList()) {
             task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
-            new Save().save(task);
+            new Save(database).save(task);
         }
         return REDIRECT_MAIN;
     }
@@ -170,12 +170,12 @@ public class TaskController implements WebMvcConfigurer, Constants, ViewPages {
     }
 
     private void saveTask(Task task) {
-        new Save().save(task);
+        new Save(database).save(task);
         taskDAO.addTask(task);
     }
 
     private void saveLogin(Login login) {
-        new Save().save(login);
+        new Save(database).save(login);
         loginDAO.addLogin(login);
     }
 }

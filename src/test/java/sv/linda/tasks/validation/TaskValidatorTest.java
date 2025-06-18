@@ -1,9 +1,7 @@
 package sv.linda.tasks.validation;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.constructors.Task.Task;
@@ -11,14 +9,16 @@ import sv.linda.tasks.constructors.Task.Task;
 import java.util.List;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class TaskValidatorTest {
     private TaskValidator valid;
     private Task task;
     private Errors errors;
+    private final List<String> nameList = List.of("Test1", "Test2");
 
     @BeforeEach
     void setUp() {
-        List<String> nameList = List.of("Test1", "Test2");
         valid = new TaskValidator(nameList);
         task = new Task();
         errors = new BeanPropertyBindingResult(task, "task");
@@ -29,10 +29,10 @@ class TaskValidatorTest {
         task.setTitle("");
         task.setDescription("This is just for a test");
         valid.validate(task, errors);
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(errors.hasFieldErrors("title")),
-                () -> Assertions.assertEquals("You need to enter a name", Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage()),
-                () -> Assertions.assertFalse(errors.hasFieldErrors("description"))
+        assertAll(
+                () -> assertTrue(errors.hasFieldErrors("title")),
+                () -> assertEquals("You need to enter a name", Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage()),
+                () -> assertFalse(errors.hasFieldErrors("description"))
         );
     }
 
@@ -40,20 +40,20 @@ class TaskValidatorTest {
     void emptyDescriptionTest() {
         task.setTitle("Test3");
         valid.validate(task, errors);
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(errors.hasFieldErrors("description")),
-                () -> Assertions.assertEquals("You need a description", Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage()),
-                () -> Assertions.assertFalse(errors.hasFieldErrors("title"))
+        assertAll(
+                () -> assertTrue(errors.hasFieldErrors("description")),
+                () -> assertEquals("You need a description", Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage()),
+                () -> assertFalse(errors.hasFieldErrors("title"))
         );
     }
 
     @Test
     void fullEmptyTest() {
         valid.validate(task, errors);
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(errors.hasFieldErrors("title")),
-                () -> Assertions.assertTrue(errors.hasFieldErrors("description")),
-                () -> Assertions.assertFalse(errors.getAllErrors().isEmpty())
+        assertAll(
+                () -> assertTrue(errors.hasFieldErrors("title")),
+                () -> assertTrue(errors.hasFieldErrors("description")),
+                () -> assertFalse(errors.getAllErrors().isEmpty())
         );
     }
 
@@ -62,10 +62,10 @@ class TaskValidatorTest {
         task.setTitle("Test2");
         task.setDescription("test");
         valid.validate(task, errors);
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(errors.hasFieldErrors("description")),
-                () -> Assertions.assertEquals("Description is too short. Minimum 10 characters", Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage()),
-                () -> Assertions.assertFalse(errors.getAllErrors().isEmpty())
+        assertAll(
+                () -> assertTrue(errors.hasFieldErrors("description")),
+                () -> assertEquals("Description is too short. Minimum 10 characters", Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage()),
+                () -> assertFalse(errors.getAllErrors().isEmpty())
         );
     }
 
@@ -74,10 +74,10 @@ class TaskValidatorTest {
         task.setTitle("Test1");
         task.setDescription("This is just for a test");
         valid.validate(task, errors);
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(errors.hasFieldErrors("title")),
-                () -> Assertions.assertEquals("That task name is in use", Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage()),
-                () -> Assertions.assertFalse(errors.hasFieldErrors("description"))
+        assertAll(
+                () -> assertTrue(errors.hasFieldErrors("title")),
+                () -> assertEquals("That task name is in use", Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage()),
+                () -> assertFalse(errors.hasFieldErrors("description"))
         );
     }
 }

@@ -1,16 +1,17 @@
 package sv.linda.tasks.constructors.Task;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class TaskDAOTest {
 
     @Test
     void testEmptyTaskDAO() {
         TaskDAO taskDAO = new TaskDAO();
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(taskDAO.getTasks().getTaskList().isEmpty()),
-                () -> Assertions.assertNotEquals(null, taskDAO.getTasks().getTaskList())
+        assertAll(
+                () -> assertTrue(taskDAO.getTasks().getTaskList().isEmpty()),
+                () -> assertNotEquals(null, taskDAO.getTasks().getTaskList())
         );
     }
 
@@ -21,6 +22,11 @@ class TaskDAOTest {
             Task tempTask = new Task("Test" + i, "This is a test");
             taskDAO.addTask(tempTask);
         }
-        Assertions.assertEquals(10, taskDAO.getTasks().getTaskList().size());
+        assertAll(
+                () -> assertEquals(10, taskDAO.getTasks().getTaskList().size()),
+                () -> assertTrue(taskDAO.getTasks().getTaskList().contains(new Task("Test0", "This is a test"))),
+                () -> assertTrue(taskDAO.getTasks().getTaskList().contains(new Task("Test9", "This is a test"))),
+                () -> assertFalse(taskDAO.getTasks().getTaskList().contains(new Task("Test100", "This is a test also")))
+        );
     }
 }
