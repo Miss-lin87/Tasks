@@ -9,13 +9,10 @@ import org.bson.Document;
 import java.util.List;
 
 public class DataBaseFunctions {
-    private String URI;
-    private MongoClient client;
-    private MongoDatabase database;
+    protected MongoDatabase database;
 
     public DataBaseFunctions(String URI, String database) {
-        this.URI = URI;
-        this.client = MongoClients.create(this.URI);
+        MongoClient client = MongoClients.create(URI);
         this.database = client.getDatabase(database);
     }
 
@@ -42,7 +39,7 @@ public class DataBaseFunctions {
     public boolean findOne(Document data, String collectionName) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         for (Document doc : collection.find()) {
-            if (doc.getString("title").equals(data.getString("title"))) {
+            if (doc.equals(data)) {
                 return true;
             }
         }

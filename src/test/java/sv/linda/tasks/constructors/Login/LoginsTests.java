@@ -3,13 +3,14 @@ package sv.linda.tasks.constructors.Login;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class LoginsTests {
+import static org.junit.jupiter.api.Assertions.*;
+
+class LoginsTests extends Logins {
     @Test
     void testLogins() {
-        Logins logins = new Logins();
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(logins.getLoginList().isEmpty()),
-                () -> Assertions.assertNotNull(logins.getLoginList())
+        assertAll(
+                () -> assertTrue(getLoginList().isEmpty()),
+                () -> assertNotNull(getLoginList())
         );
     }
 }
