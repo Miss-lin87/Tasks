@@ -15,11 +15,12 @@ import sv.linda.tasks.validation.CreateLoginValidator;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 
+import javax.xml.crypto.Data;
 import java.io.FileInputStream;
 import java.util.Properties;
 
 @Configuration
-public class AppConfig implements WebMvcConfigurer, Constants {
+public class AppConfig implements WebMvcConfigurer {
     private Converter convert;
 
     @Autowired
@@ -28,18 +29,18 @@ public class AppConfig implements WebMvcConfigurer, Constants {
     }
 
     @Bean
-    public TaskValidator taskValidator() {
-        return new TaskValidator(convert.getTasksNames(database.getAllData(TASKS)));
+    public TaskValidator taskValidator(DataBaseFunctions database) {
+        return new TaskValidator(convert.getTasksNames(database.getAllData("SavedTasks")));
     }
 
     @Bean
-    public LoginValidator loginValidator() {
-        return new LoginValidator(convert.getLogins(database.getAllData(USERS)));
+    public LoginValidator loginValidator(DataBaseFunctions database) {
+        return new LoginValidator(convert.getLogins(database.getAllData("Logins")));
     }
 
     @Bean
-    public CreateLoginValidator createLoginValidator() {
-        return new CreateLoginValidator(convert.getLogins(database.getAllData(USERS)));
+    public CreateLoginValidator createLoginValidator(DataBaseFunctions database) {
+        return new CreateLoginValidator(convert.getLogins(database.getAllData("Logins")));
     }
 
     @Bean
