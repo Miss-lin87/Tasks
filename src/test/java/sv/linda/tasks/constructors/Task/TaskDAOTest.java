@@ -1,6 +1,8 @@
 package sv.linda.tasks.constructors.Task;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
+import sv.linda.tasks.functions.Converter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,7 +10,7 @@ class TaskDAOTest {
 
     @Test
     void testEmptyTaskDAO() {
-        TaskDAO taskDAO = new TaskDAO();
+        TaskDAO taskDAO = new TaskDAO(new Converter(new Gson()), new Tasks());
         assertAll(
                 () -> assertTrue(taskDAO.getTasks().getTaskList().isEmpty()),
                 () -> assertNotEquals(null, taskDAO.getTasks().getTaskList())
@@ -17,7 +19,7 @@ class TaskDAOTest {
 
     @Test
     void testFillTaskDAO() {
-        TaskDAO taskDAO = new TaskDAO();
+        TaskDAO taskDAO = new TaskDAO(new Converter(new Gson()), new Tasks());
         for (int i = 0; i < 10; i++) {
             Task tempTask = new Task("Test" + i, "This is a test");
             taskDAO.addTask(tempTask);
