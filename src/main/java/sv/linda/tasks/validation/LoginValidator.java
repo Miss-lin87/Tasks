@@ -2,11 +2,12 @@ package sv.linda.tasks.validation;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 
 import java.util.List;
 
-public class LoginValidator implements Validator {
+public class LoginValidator implements Validator, Constants {
     private final List<Login> loginList;
 
     public LoginValidator(List<Login> loginList) {
@@ -28,18 +29,18 @@ public class LoginValidator implements Validator {
 
     private void validateUsername(Login userLogin, Errors errors) {
         if (userLogin.getUsername() == null || userLogin.getUsername().trim().isEmpty()) {
-            errors.rejectValue("username", "username.empty", "You need to enter a username");
+            errors.rejectValue(USERNAME, "username.empty", "You need to enter a username");
         } else if (loginList.stream().noneMatch(login -> login.getUsername().equals(userLogin.getUsername()))) {
-            errors.rejectValue("username", "username.is.wrong", "You entered a wrong username");
+            errors.rejectValue(USERNAME, "username.is.wrong", "You entered a wrong username");
         }
     }
 
     private void validatePassword(Login userLogin, Errors errors) {
         if (userLogin.getPassword() == null || userLogin.getPassword().trim().isEmpty()) {
-            errors.rejectValue("password", "password.empty", "You need to enter a password");
+            errors.rejectValue(PASSWORD, "password.empty", "You need to enter a password");
         } else if (loginList.stream().anyMatch(login -> login.getUsername().equals(userLogin.getUsername()) &&
                 !login.getPassword().equals(userLogin.getPassword()))) {
-            errors.rejectValue("password", "password.is.wrong", "You entered a wrong password");
+            errors.rejectValue(PASSWORD, "password.is.wrong", "You entered a wrong password");
         }
     }
 

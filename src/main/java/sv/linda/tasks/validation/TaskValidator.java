@@ -2,11 +2,12 @@ package sv.linda.tasks.validation;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Task.Task;
 
 import java.util.List;
 
-public class TaskValidator implements Validator {
+public class TaskValidator implements Validator, Constants {
     final List<String> nameList;
 
     public TaskValidator(List<String> nameList) {
@@ -27,17 +28,17 @@ public class TaskValidator implements Validator {
 
     private void validateTitle(String title, Errors error) {
         if (title == null || title.trim().isEmpty()) {
-            error.rejectValue("title", "title.empty", "You need to enter a name");
+            error.rejectValue(TITLE, "title.empty", "You need to enter a name");
         } else if (nameList.contains(title)) {
-            error.rejectValue("title", "title.already.exists", "That task name is in use");
+            error.rejectValue(TITLE, "title.already.exists", "That task name is in use");
         }
     }
 
     private void validateDescription(String description, Errors error) {
         if (description == null || description.isEmpty()) {
-            error.rejectValue("description", "description.empty", "You need a description");
+            error.rejectValue(DESCRIPTION, "description.empty", "You need a description");
         } else if (description.length() < 10) {
-            error.rejectValue("description", "description.too.short", "Description is too short. Minimum 10 characters");
+            error.rejectValue(DESCRIPTION, "description.too.short", "Description is too short. Minimum 10 characters");
         }
     }
 

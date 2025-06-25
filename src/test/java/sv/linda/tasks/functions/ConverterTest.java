@@ -1,5 +1,6 @@
 package sv.linda.tasks.functions;
 
+import com.google.gson.Gson;
 import com.mongodb.client.*;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,13 +17,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ConverterTest extends Converter {
+public class ConverterTest {
     @Mock
     private MongoCollection<Document> mockList = mock(MongoCollection.class);
     @Mock
     private FindIterable<Document> iterable = mock(FindIterable.class);
     @Mock
     private MongoCursor<Document> cursor = mock(MongoCursor.class);
+    private Gson gson = new Gson();
+    private final Converter converter = new Converter(gson);
     private final Document mockTaskDoc = new Document();
     private final Document mockLogin1Dock = new Document();
     private final Document mockLogin2Dock = new Document();
@@ -56,7 +59,7 @@ public class ConverterTest extends Converter {
 
     @Test
     public void testToTask() {
-        Task temp = toTask(mockTaskDoc);
+        Task temp = converter.toTask(mockTaskDoc);
         assertAll(
                 () -> assertNotNull(temp),
                 () -> assertEquals(Task.class, temp.getClass()),
@@ -68,7 +71,7 @@ public class ConverterTest extends Converter {
 
     @Test
     public void testToLogin() {
-        Login temp = toLogin(mockLogin1Dock);
+        Login temp = converter.toLogin(mockLogin1Dock);
         assertAll(
                 () -> assertNotNull(temp),
                 () -> assertEquals("admin", temp.getUsername()),
@@ -82,8 +85,8 @@ public class ConverterTest extends Converter {
         List<String> result = new ArrayList<>(List.of("Task1"));
         assertAll(
                 () -> assertNotNull(mockList), this::mockTaskCollection,
-                () -> assertEquals(result, getTasksNames(mockList)), this::mockTaskCollection,
-                () -> assertTrue(getTasksNames(mockList).contains("Task1"))
+                () -> assertEquals(result, converter.getTasksNames(mockList)), this::mockTaskCollection,
+                () -> assertTrue(converter.getTasksNames(mockList).contains("Task1"))
         );
     }
 
@@ -92,8 +95,8 @@ public class ConverterTest extends Converter {
         List<Login> result = new ArrayList<>(List.of(new Login("admin", "admin1"), new Login("user", "user123")));
         assertAll(
                 () -> assertNotNull(mockList), this::mockLoginCollection,
-                () -> assertEquals(result, getLogins(mockList)), this::mockLoginCollection,
-                () -> assertTrue(getLogins(mockList).contains(result.getFirst()))
+                () -> assertEquals(result, converter.getLogins(mockList)), this::mockLoginCollection,
+                () -> assertTrue(converter.getLogins(mockList).contains(result.getFirst()))
         );
     }
 }

@@ -8,7 +8,7 @@ import sv.linda.tasks.functions.Converter;
 
 @Repository
 public class TaskDAO implements Constants {
-    private final Converter convert = new Converter();
+    private final Converter convert = new Converter(gson);
     private final Tasks tasks = new Tasks();
 
     @PostConstruct

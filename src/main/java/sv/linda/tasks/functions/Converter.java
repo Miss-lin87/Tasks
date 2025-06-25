@@ -20,8 +20,8 @@ import java.util.List;
 public class Converter implements Constants {
     protected Gson gson;
 
-    public Converter() {
-        gson = new Gson();
+    public Converter(Gson gson) {
+        this.gson = gson;
     }
 
     public Login toLogin(Document doc) {

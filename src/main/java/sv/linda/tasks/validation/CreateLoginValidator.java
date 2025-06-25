@@ -3,12 +3,13 @@ package sv.linda.tasks.validation;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class CreateLoginValidator implements Validator {
+public class CreateLoginValidator implements Validator, Constants {
     private final List<Login> logins;
 
     public CreateLoginValidator(List<Login> logins) {
@@ -33,19 +34,19 @@ public class CreateLoginValidator implements Validator {
 
     private void validateUsername (Login login, Errors errors) {
         if (login.getUsername() == null || login.getUsername().trim().isEmpty()) {
-            errors.rejectValue("username", "username.empty", "You need to enter a username");
+            errors.rejectValue(USERNAME, "username.empty", "You need to enter a username");
         } else if (logins.stream().anyMatch(existingLogin -> existingLogin.getUsername().equals(login.getUsername()))) {
-            errors.rejectValue("username", "username.already.exists", "That username is already taken");
+            errors.rejectValue(USERNAME, "username.already.exists", "That username is already taken");
         }
     }
 
     private void validatePassword (Login login, Errors errors) {
         if (login.getPassword() == null || login.getPassword().trim().isEmpty()) {
-            errors.rejectValue("password", "password.empty", "You need to enter a password");
+            errors.rejectValue(PASSWORD, "password.empty", "You need to enter a password");
         } else if (login.getPassword().length() < 6) {
-            errors.rejectValue("password", "password.too.short", "Password must be at least 6 characters long");
+            errors.rejectValue(PASSWORD, "password.too.short", "Password must be at least 6 characters long");
         } else if (!Pattern.compile("[a-zA-Z]").matcher(login.getPassword()).find() || !Pattern.compile("[0-9]").matcher(login.getPassword()).find()) {
-            errors.rejectValue("password", "password.weak", "Password must contain letter and numbers");
+            errors.rejectValue(PASSWORD, "password.weak", "Password must contain letter and numbers");
         }
     }
 

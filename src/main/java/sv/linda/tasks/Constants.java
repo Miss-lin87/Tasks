@@ -1,5 +1,7 @@
 package sv.linda.tasks;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import com.google.gson.Gson;
 import sv.linda.tasks.database.DataBaseFunctions;
 
 import java.io.FileInputStream;
@@ -7,42 +9,44 @@ import java.util.Properties;
 
 public interface Constants {
 
-    private static void loadProperties() {
+    private static Properties loadProperties() {
+        Properties temp = new Properties();
         try {
-            prop.load(new FileInputStream(System.getProperty("user.dir") + "\\src\\main\\application.properties"));
+            temp.load(new FileInputStream(System.getProperty("user.dir") + "\\src\\main\\application.properties"));
         } catch (Exception e) {
             throw new RuntimeException("Failed to load properties file: " + e.getMessage());
         }
+        return temp;
     }
 
     private static String getDatabaseURL() {
-        loadProperties();
         return prop.getProperty("db.url");
     }
 
     private static String getDatabaseName() {
-        loadProperties();
         return prop.getProperty("db.database.name");
     }
 
     private static String getDatabaseTask() {
-        loadProperties();
         return prop.getProperty("db.database.tasks");
     }
 
     private static String getDatabaseUsers() {
-        loadProperties();
         return prop.getProperty("db.database.users");
     }
 
     private static String getBaseError() {
-        loadProperties();
         return prop.getProperty("error.base");
     }
 
-    Properties prop = new Properties();
+    Properties prop = loadProperties();
     String BASIC_ERROR = getBaseError();
     String TASKS = getDatabaseTask();
     String USERS = getDatabaseUsers();
     DataBaseFunctions database = new DataBaseFunctions(getDatabaseURL(), getDatabaseName());
+    Gson gson = new Gson();
+    String TITLE = "title";
+    String DESCRIPTION = "description";
+    String USERNAME = "username";
+    String PASSWORD = "password";
 }

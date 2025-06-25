@@ -6,6 +6,7 @@ import org.bson.conversions.Bson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Task.Task;
@@ -16,11 +17,12 @@ import static org.mockito.Mockito.when;
 
 public class SaveTest {
     private DataBaseFunctions mockDB = Mockito.mock(DataBaseFunctions.class);
+    private Gson gson = Mockito.mock(Gson.class);
     private Save save;
 
     @BeforeEach
     public void init() {
-        save = new Save(mockDB);
+        save = new Save(mockDB, gson);
     }
 
     @Test

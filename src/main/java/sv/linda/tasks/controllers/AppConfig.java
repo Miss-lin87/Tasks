@@ -1,5 +1,7 @@
 package sv.linda.tasks.controllers;
 
+import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -11,7 +13,12 @@ import sv.linda.tasks.validation.TaskValidator;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer, Constants {
-    private final Converter convert = new Converter();
+    private Converter convert;
+
+    @Autowired
+    public void init(Gson gson) {
+        this.convert = new Converter(gson);
+    }
 
     @Bean
     public TaskValidator taskValidator() {

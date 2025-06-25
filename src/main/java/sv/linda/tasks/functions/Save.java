@@ -11,8 +11,8 @@ public class Save implements Constants {
     protected final Gson gson;
     protected DataBaseFunctions database;
 
-    public Save(DataBaseFunctions database) {
-        this.gson = new Gson();
+    public Save(DataBaseFunctions database, Gson gson) {
+        this.gson = gson;
         this.database = database;
     }
 

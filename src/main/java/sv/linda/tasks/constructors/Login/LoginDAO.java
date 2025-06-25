@@ -9,7 +9,7 @@ import sv.linda.tasks.functions.Converter;
 @Repository
 public class LoginDAO implements Constants {
     private final Logins logins = new Logins();
-    private final Converter convert = new Converter();
+    private final Converter convert = new Converter(gson);
 
     @PostConstruct
     public void init() {
