@@ -52,7 +52,6 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public MongoClient mongoClient(DatabaseConfig dbConfig) {
-        System.out.println(dbConfig);
         return MongoClients.create(dbConfig.getUrl());
     }
 

@@ -1,6 +1,5 @@
 package sv.linda.tasks.controllers;
 
-import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,6 @@ import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 import java.net.URI;
 import java.util.Objects;
-import java.util.Properties;
-
 
 @RestController
 public class TaskController implements WebMvcConfigurer, Constants {
@@ -85,7 +82,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
         } else {
             saveTask(task);
         }
-        return new ModelAndView(MAIN);
+        return viewPages.getView().main;
     }
 
     @GetMapping("/addLogin")
@@ -111,14 +108,14 @@ public class TaskController implements WebMvcConfigurer, Constants {
             task.changeStatus(Status.toEnum(request.getParameter("Selected" + task.getTitle())));
             save.save(task);
         }
-        return new ModelAndView(MAIN);
+        return viewPages.getView().main;
     }
 
     @PostMapping("/deleteTask/{name}")
     public ModelAndView deleteTask(@PathVariable String name) {
         taskDAO.getTasks().getTaskList().removeIf(task -> task.getTitle().equals(name));
         database.deleteOne(name,TASKS);
-        return new ModelAndView(MAIN);
+        return viewPages.getView().main;
     }
 
     @GetMapping("/main")
@@ -141,7 +138,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
         if (errors.hasErrors()) {
             return setLoginErrors(errors);
         }
-        return new ModelAndView(MAIN);
+        return viewPages.getView().main;
     }
 
 

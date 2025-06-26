@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.constructors.Login.Login;
@@ -28,7 +29,7 @@ class LoginValidatorTest {
 
     @BeforeEach
     void setUp() {
-        valid = new LoginValidator(new LoginDAO(new Converter(new Gson()), new Logins(), new DataBaseFunctions("","")));
+        valid = Mockito.mock(LoginValidator.class);
         login = new Login();
         errors = new BeanPropertyBindingResult(login, "login");
     }

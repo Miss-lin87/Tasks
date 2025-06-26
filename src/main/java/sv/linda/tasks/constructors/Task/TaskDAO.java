@@ -10,9 +10,9 @@ import sv.linda.tasks.functions.Converter;
 
 @Service
 public class TaskDAO implements Constants {
-    private Converter convert;
-    private Tasks tasks;
-    private DataBaseFunctions database;
+    private final Converter convert;
+    private final Tasks tasks;
+    private final DataBaseFunctions database;
 
     @Autowired
     public TaskDAO(Converter convert, Tasks tasks, DataBaseFunctions database) {

@@ -3,6 +3,7 @@ package sv.linda.tasks.validation;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.constructors.Task.Task;
@@ -24,7 +25,7 @@ class TaskValidatorTest {
 
     @BeforeEach
     void setUp() {
-        valid = new TaskValidator(new TaskDAO(new Converter(new Gson()), new Tasks(), new DataBaseFunctions("","")));
+        valid = Mockito.mock(TaskValidator.class);
         task = new Task();
         errors = new BeanPropertyBindingResult(task, "task");
     }

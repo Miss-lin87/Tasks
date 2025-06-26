@@ -13,8 +13,8 @@ import java.util.Properties;
 
 @Service
 public class Save implements Constants {
-    private Gson gson;
-    private DataBaseFunctions database;
+    private final Gson gson;
+    private final DataBaseFunctions database;
 
     @Autowired
     public Save(DataBaseFunctions database, Gson gson) {

@@ -2,6 +2,7 @@ package sv.linda.tasks.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.Constants;
@@ -25,7 +26,7 @@ class NewUserValidatorTest implements Constants {
 
     @BeforeEach
     void setUp() {
-        valid = new CreateLoginValidator(mockLoginList);
+        valid = Mockito.mock(CreateLoginValidator.class);
         login = new Login();
         errors = new BeanPropertyBindingResult(login, "login");
     }

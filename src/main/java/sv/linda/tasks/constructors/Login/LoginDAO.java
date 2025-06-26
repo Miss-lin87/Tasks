@@ -10,9 +10,9 @@ import sv.linda.tasks.functions.Converter;
 
 @Service
 public class LoginDAO implements Constants {
-    private Logins logins;
-    private Converter convert;
-    private DataBaseFunctions database;
+    private final Logins logins;
+    private final Converter convert;
+    private final DataBaseFunctions database;
 
     @Autowired
     public LoginDAO(Converter convert, Logins logins, DataBaseFunctions database) {
