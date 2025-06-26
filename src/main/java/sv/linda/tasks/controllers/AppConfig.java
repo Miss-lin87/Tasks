@@ -1,27 +1,21 @@
 package sv.linda.tasks.controllers;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.google.gson.Gson;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.LoginDAO;
-import sv.linda.tasks.constructors.Login.Logins;
 import sv.linda.tasks.constructors.Task.TaskDAO;
-import sv.linda.tasks.constructors.Task.Tasks;
 import sv.linda.tasks.database.DataBaseFunctions;
+import sv.linda.tasks.database.DatabaseConfig;
 import sv.linda.tasks.functions.Converter;
-import sv.linda.tasks.functions.Save;
 import sv.linda.tasks.validation.CreateLoginValidator;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
-
-import java.io.FileInputStream;
-import java.util.Properties;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
@@ -47,38 +41,28 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public TaskDAO taskDAO(Converter convert, Tasks tasks, DataBaseFunctions database) {
-        return new TaskDAO(convert, tasks, database);
+    public PageConfig pageConfig() {
+        return new PageConfig();
     }
 
     @Bean
-    public Properties properties() {
-        Properties prop = new Properties();
-        try {
-            prop.load(new FileInputStream(System.getProperty("user.dir") + "\\src\\main\\application.properties"));
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to load properties file: " + e.getMessage());
-        }
-        return prop;
+    public ViewPages viewPages(PageConfig pageConfig) {
+        return new ViewPages(pageConfig);
     }
 
     @Bean
-    public ViewPages viewPages() {
-        return new ViewPages(properties());
+    public MongoClient mongoClient(DatabaseConfig dbConfig) {
+        System.out.println(dbConfig);
+        return MongoClients.create(dbConfig.getUrl());
     }
 
     @Bean
-    public DataBaseFunctions database() {
-        return new DataBaseFunctions(properties().getProperty("db.url"), properties().getProperty("db.database.name"));
+    public MongoDatabase mongoDatabase(MongoClient mongoClient, DatabaseConfig dbConfig) {
+        return mongoClient.getDatabase(dbConfig.getDatabase().getName());
     }
 
     @Bean
-    public Save save(DataBaseFunctions database, Gson gson) {
-        return new Save(database, gson);
-    }
-
-    @Bean
-    public Logins logins() {
-        return new Logins();
+    public DataBaseFunctions database(MongoClient mongoClient, MongoDatabase mongoDB) {
+        return new DataBaseFunctions(mongoClient, mongoDB);
     }
 }

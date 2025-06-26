@@ -4,17 +4,26 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import jakarta.annotation.PreDestroy;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sv.linda.tasks.Constants;
 
+@Service
 public class DataBaseFunctions implements Constants {
-    protected MongoDatabase database;
+    private final MongoDatabase database;
+    private final MongoClient client;
 
     @Autowired
-    public DataBaseFunctions(String URI, String database) {
-        MongoClient client = MongoClients.create(URI);
-        this.database = client.getDatabase(database);
+    public DataBaseFunctions(MongoClient client, MongoDatabase database) {
+        this.client = client;
+        this.database = database;
+    }
+
+    @PreDestroy
+    public void clean() {
+        client.close();
     }
 
     public void addOne(Document data, String collectionName) {

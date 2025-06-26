@@ -1,9 +1,20 @@
 package sv.linda.tasks.database;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
+@Data
+@ConfigurationProperties(prefix = "db")
 public class DatabaseConfig {
+    private String url;
+    private Database database = new Database();
+
+    @Data
+    public static class Database {
+        private String name;
+        private String tasks;
+        private String users;
+    }
 }

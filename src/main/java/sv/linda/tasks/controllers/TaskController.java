@@ -28,6 +28,7 @@ import java.net.URI;
 import java.util.Objects;
 import java.util.Properties;
 
+
 @RestController
 public class TaskController implements WebMvcConfigurer, Constants {
     private final TaskDAO taskDAO;
@@ -36,28 +37,23 @@ public class TaskController implements WebMvcConfigurer, Constants {
     private final LoginValidator loginValidator;
     private final CreateLoginValidator createLoginValidator;
     private final ViewPages viewPages;
-    private final Properties properties;
     private final Save save;
     private final DataBaseFunctions database;
-    private final Gson gson;
 
     @Autowired
     public TaskController(TaskDAO taskDAO,
                           LoginDAO loginDAO, TaskValidator valid,
                           LoginValidator loginValidator, CreateLoginValidator createLoginValidator,
-                          ViewPages viewPages, Properties properties,
-                          Save save, DataBaseFunctions database,
-                          Gson gson) {
+                          ViewPages viewPages,
+                          Save save, DataBaseFunctions database) {
         this.taskDAO = taskDAO;
         this.loginDAO = loginDAO;
         this.taskValidator = valid;
         this.loginValidator = loginValidator;
         this.createLoginValidator = createLoginValidator;
         this.viewPages = viewPages;
-        this.properties = properties;
         this.save = save;
         this.database = database;
-        this.gson = gson;
     }
 
     @GetMapping("/all")
@@ -77,7 +73,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
 
     @GetMapping("/addTask")
     public ModelAndView loadNewTask(@Valid Task task, Errors errors) {
-        return viewPages.getPage(ADD_TASK);
+        return viewPages.getView().tasks;
     }
 
     @PostMapping("/addTask")
@@ -94,7 +90,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
 
     @GetMapping("/addLogin")
     public ModelAndView newLogin(@Valid Login login, Errors errors) {
-        return viewPages.getPage(ADD_LOGIN);
+        return viewPages.getView().addLogin;
     }
 
     @PostMapping("/addLogin")
@@ -106,7 +102,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
         } else {
             saveLogin(login);
         }
-        return viewPages.getPage(LOGIN);
+        return viewPages.getView().login;
     }
 
     @PostMapping("/updateTask")
@@ -127,7 +123,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
 
     @GetMapping("/main")
     public ModelAndView mainPage() {
-        ModelAndView tempView = viewPages.getPage(TASKS_PAGE);
+        ModelAndView tempView = viewPages.getView().tasks;
         tempView.addObject("tasks", taskDAO.getTasks().getTaskList());
         tempView.addObject("Statuses", Status.getAll());
         return tempView;
@@ -135,7 +131,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
 
     @GetMapping("/")
     public ModelAndView loadLoginPage(@Valid Login login, Errors errors) {
-        return viewPages.getPage(LOGIN);
+        return viewPages.getView().login;
     }
 
     @PostMapping("/login")
@@ -161,7 +157,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
     }
 
     private ModelAndView setTaskErrors(Errors errors) {
-        ModelAndView tempView = viewPages.getPage(ADD_TASK);
+        ModelAndView tempView = viewPages.getView().addTask;
         String nameError = (errors.getFieldError("title") != null) ? Objects.requireNonNull(errors.getFieldError("title")).getDefaultMessage() : "";
         String descriptionError = (errors.getFieldError("description") != null) ? Objects.requireNonNull(errors.getFieldError("description")).getDefaultMessage() : "";
         tempView.addObject("nameError", nameError);
@@ -170,7 +166,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
     }
 
     private ModelAndView setLoginErrors(Errors errors) {
-        ModelAndView tempView = viewPages.getPage(LOGIN);
+        ModelAndView tempView = viewPages.getView().login;
         String usernameError = (errors.getFieldError("username") != null) ? Objects.requireNonNull(errors.getFieldError("username")).getDefaultMessage() : "";
         String passwordError = (errors.getFieldError("password") != null) ? Objects.requireNonNull(errors.getFieldError("password")).getDefaultMessage() : "";
         tempView.addObject("usernameError", usernameError);
@@ -179,7 +175,7 @@ public class TaskController implements WebMvcConfigurer, Constants {
     }
 
     private ModelAndView setCreateLoginErrors(Errors errors) {
-        ModelAndView tempView = viewPages.getPage(ADD_LOGIN);
+        ModelAndView tempView = viewPages.getView().addLogin;
         String usernameError = (errors.getFieldError("username") != null) ? Objects.requireNonNull(errors.getFieldError("username")).getDefaultMessage() : "";
         String passwordError = (errors.getFieldError("password") != null) ? Objects.requireNonNull(errors.getFieldError("password")).getDefaultMessage() : "";
         tempView.addObject("usernameError", usernameError);
