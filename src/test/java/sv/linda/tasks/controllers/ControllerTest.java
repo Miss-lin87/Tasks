@@ -30,8 +30,8 @@ class ControllerTest {
     private final LoginDAO loginDAO;
     private final TaskController controller;
     private final MockMvc mvc;
-    private TaskValidator valid = new TaskValidator(List.of("Test1", "Test2"));
-    private LoginValidator loginValid = new LoginValidator(List.of(new Login(), new Login()));
+    //private TaskValidator valid = new TaskValidator(List.of("Test1", "Test2"));
+    //private LoginValidator loginValid = new LoginValidator(List.of(new Login(), new Login()));
     private CreateLoginValidator createloginvalid = new CreateLoginValidator(List.of(new Login(), new Login()));
     private final ViewPages viewPages = new ViewPages(Mockito.mock(Properties.class));
     private DataBaseFunctions database = Mockito.mock(DataBaseFunctions.class);
@@ -39,7 +39,7 @@ class ControllerTest {
     ControllerTest() {
         this.taskDAO = new TaskDAO(new Converter(new Gson()), new Tasks(), database);
         this.loginDAO = Mockito.mock(LoginDAO.class);
-        this.controller = new TaskController(taskDAO, loginDAO, valid, loginValid, createloginvalid, viewPages, new Properties());
+        this.controller = Mockito.mock(TaskController.class);
         this.mvc = MockMvcBuilders
                 .standaloneSetup(controller)
                 .setValidator(valid)

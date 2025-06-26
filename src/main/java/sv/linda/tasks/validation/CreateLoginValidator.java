@@ -1,19 +1,31 @@
 package sv.linda.tasks.validation;
 
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
+import sv.linda.tasks.constructors.Login.LoginDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class CreateLoginValidator implements Validator, Constants {
     private final List<Login> logins;
+    private final LoginDAO loginDAO;
 
-    public CreateLoginValidator(List<Login> logins) {
-        this.logins = logins;
+    @Autowired
+    public CreateLoginValidator(LoginDAO loginDAO) {
+        this.logins = new ArrayList<>();
+        this.loginDAO = loginDAO;
+    }
+
+    @PostConstruct
+    public void init() {
+        logins.addAll(loginDAO.getLogins().getLoginList());
     }
 
     @Override

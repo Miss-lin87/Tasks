@@ -1,12 +1,17 @@
 package sv.linda.tasks.validation;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.constructors.Login.Login;
+import sv.linda.tasks.constructors.Login.LoginDAO;
+import sv.linda.tasks.constructors.Login.Logins;
 import sv.linda.tasks.constructors.Task.Task;
+import sv.linda.tasks.database.DataBaseFunctions;
+import sv.linda.tasks.functions.Converter;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +28,7 @@ class LoginValidatorTest {
 
     @BeforeEach
     void setUp() {
-        valid = new LoginValidator(nameList);
+        valid = new LoginValidator(new LoginDAO(new Converter(new Gson()), new Logins(), new DataBaseFunctions("","")));
         login = new Login();
         errors = new BeanPropertyBindingResult(login, "login");
     }

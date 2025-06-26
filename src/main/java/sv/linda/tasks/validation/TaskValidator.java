@@ -1,17 +1,31 @@
 package sv.linda.tasks.validation;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Task.Task;
+import sv.linda.tasks.constructors.Task.TaskDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskValidator implements Validator, Constants {
-    final List<String> nameList;
+    private final List<String> nameList;
+    private final TaskDAO taskDAO;
 
-    public TaskValidator(List<String> nameList) {
-        this.nameList = nameList;
+    @Autowired
+    public TaskValidator(TaskDAO taskDAO) {
+        this.nameList = new ArrayList<>();
+        this.taskDAO = taskDAO;
+    }
+
+    @PostConstruct
+    public void init() {
+        for (Task task : taskDAO.getTasks().getTaskList()) {
+            nameList.add(task.getTitle());
+        }
     }
 
     @Override

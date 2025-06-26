@@ -12,6 +12,8 @@ import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.database.DataBaseFunctions;
 
+import java.util.Properties;
+
 import static org.mockito.Mockito.when;
 
 

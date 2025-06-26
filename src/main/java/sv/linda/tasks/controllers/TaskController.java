@@ -36,18 +36,18 @@ public class TaskController implements WebMvcConfigurer, Constants {
     private final LoginValidator loginValidator;
     private final CreateLoginValidator createLoginValidator;
     private final ViewPages viewPages;
-
-    @Autowired
-    private Save save;
-    private Properties properties;
-    private DataBaseFunctions database;
-    private Gson gson;
+    private final Properties properties;
+    private final Save save;
+    private final DataBaseFunctions database;
+    private final Gson gson;
 
     @Autowired
     public TaskController(TaskDAO taskDAO,
                           LoginDAO loginDAO, TaskValidator valid,
                           LoginValidator loginValidator, CreateLoginValidator createLoginValidator,
-                          ViewPages viewPages, Properties properties) {
+                          ViewPages viewPages, Properties properties,
+                          Save save, DataBaseFunctions database,
+                          Gson gson) {
         this.taskDAO = taskDAO;
         this.loginDAO = loginDAO;
         this.taskValidator = valid;
@@ -55,6 +55,9 @@ public class TaskController implements WebMvcConfigurer, Constants {
         this.createLoginValidator = createLoginValidator;
         this.viewPages = viewPages;
         this.properties = properties;
+        this.save = save;
+        this.database = database;
+        this.gson = gson;
     }
 
     @GetMapping("/all")

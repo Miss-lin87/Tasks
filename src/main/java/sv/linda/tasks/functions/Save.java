@@ -9,6 +9,8 @@ import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.database.DataBaseFunctions;
 
+import java.util.Properties;
+
 @Service
 public class Save implements Constants {
     private Gson gson;

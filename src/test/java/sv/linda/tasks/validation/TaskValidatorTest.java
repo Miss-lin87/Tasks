@@ -1,10 +1,15 @@
 package sv.linda.tasks.validation;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.constructors.Task.Task;
+import sv.linda.tasks.constructors.Task.TaskDAO;
+import sv.linda.tasks.constructors.Task.Tasks;
+import sv.linda.tasks.database.DataBaseFunctions;
+import sv.linda.tasks.functions.Converter;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +24,7 @@ class TaskValidatorTest {
 
     @BeforeEach
     void setUp() {
-        valid = new TaskValidator(nameList);
+        valid = new TaskValidator(new TaskDAO(new Converter(new Gson()), new Tasks(), new DataBaseFunctions("","")));
         task = new Task();
         errors = new BeanPropertyBindingResult(task, "task");
     }

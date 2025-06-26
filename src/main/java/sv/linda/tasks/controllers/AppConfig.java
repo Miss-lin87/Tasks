@@ -1,12 +1,15 @@
 package sv.linda.tasks.controllers;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import sv.linda.tasks.Constants;
+import sv.linda.tasks.constructors.Login.LoginDAO;
 import sv.linda.tasks.constructors.Login.Logins;
 import sv.linda.tasks.constructors.Task.TaskDAO;
 import sv.linda.tasks.constructors.Task.Tasks;
@@ -22,36 +25,30 @@ import java.util.Properties;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
-    private Converter convert;
 
     @Autowired
     public void init(Gson gson) {
-        this.convert = new Converter(gson);
+        Converter convert = new Converter(gson);
     }
 
     @Bean
-    public TaskValidator taskValidator(DataBaseFunctions database) {
-        return new TaskValidator(convert.getTasksNames(database.getAllData("SavedTasks")));
+    public TaskValidator taskValidator(TaskDAO taskDAO) {
+        return new TaskValidator(taskDAO);
     }
 
     @Bean
-    public LoginValidator loginValidator(DataBaseFunctions database) {
-        return new LoginValidator(convert.getLogins(database.getAllData("Logins")));
+    public LoginValidator loginValidator(LoginDAO loginDAO) {
+        return new LoginValidator(loginDAO);
     }
 
     @Bean
-    public CreateLoginValidator createLoginValidator(DataBaseFunctions database) {
-        return new CreateLoginValidator(convert.getLogins(database.getAllData("Logins")));
+    public CreateLoginValidator createLoginValidator(LoginDAO loginDAO) {
+        return new CreateLoginValidator(loginDAO);
     }
 
     @Bean
-    public Converter converter(Gson gson) {
-        return new Converter(gson);
-    }
-
-    @Bean
-    public TaskDAO taskDAO() {
-        return new TaskDAO(convert, new Tasks(), database());
+    public TaskDAO taskDAO(Converter convert, Tasks tasks, DataBaseFunctions database) {
+        return new TaskDAO(convert, tasks, database);
     }
 
     @Bean
