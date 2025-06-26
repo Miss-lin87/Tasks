@@ -1,14 +1,16 @@
 package sv.linda.tasks.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Properties;
 
 public class ViewPages {
-    private Properties prop;
+    private final Properties prop;
 
-    public ViewPages(Properties prop) {
-        this.prop = prop;
+    @Autowired
+    public ViewPages(Properties properties) {
+        this.prop = properties;
     }
 
     public ModelAndView getPage(String key) {

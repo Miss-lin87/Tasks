@@ -7,15 +7,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import sv.linda.tasks.Constants;
+import sv.linda.tasks.constructors.Login.Logins;
 import sv.linda.tasks.constructors.Task.TaskDAO;
 import sv.linda.tasks.constructors.Task.Tasks;
 import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.functions.Converter;
+import sv.linda.tasks.functions.Save;
 import sv.linda.tasks.validation.CreateLoginValidator;
 import sv.linda.tasks.validation.LoginValidator;
 import sv.linda.tasks.validation.TaskValidator;
 
-import javax.xml.crypto.Data;
 import java.io.FileInputStream;
 import java.util.Properties;
 
@@ -50,7 +51,7 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public TaskDAO taskDAO() {
-        return new TaskDAO(convert, new Tasks());
+        return new TaskDAO(convert, new Tasks(), database());
     }
 
     @Bean
@@ -65,12 +66,22 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public ViewPages viewPages(Properties properties) {
-        return new ViewPages(properties);
+    public ViewPages viewPages() {
+        return new ViewPages(properties());
     }
 
     @Bean
-    public DataBaseFunctions database(Properties properties) {
-        return new DataBaseFunctions(properties.getProperty("db.url"), properties.getProperty("db.database.name"));
+    public DataBaseFunctions database() {
+        return new DataBaseFunctions(properties().getProperty("db.url"), properties().getProperty("db.database.name"));
+    }
+
+    @Bean
+    public Save save(DataBaseFunctions database, Gson gson) {
+        return new Save(database, gson);
+    }
+
+    @Bean
+    public Logins logins() {
+        return new Logins();
     }
 }

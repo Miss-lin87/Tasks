@@ -1,6 +1,7 @@
 package sv.linda.tasks.constructors.Login;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,7 +9,7 @@ class LoginDAOTest {
 
     @Test
     void testEmptyLoginDAO() {
-        LoginDAO tempDAO = new LoginDAO();
+        LoginDAO tempDAO = Mockito.mock(LoginDAO.class);
         assertAll(
                 () -> assertTrue(tempDAO.getLogins().getLoginList().isEmpty()),
                 () -> assertNotEquals(null, tempDAO.getLogins().getLoginList()),
@@ -18,7 +19,7 @@ class LoginDAOTest {
 
     @Test
     void testFillLoginDAO() {
-        LoginDAO tempDAO = new LoginDAO();
+        LoginDAO tempDAO = Mockito.mock(LoginDAO.class);
         for (int i = 0; i < 10; i++) {
             Login templogin = new Login("User" + i, "password" + i);
             tempDAO.addLogin(templogin);

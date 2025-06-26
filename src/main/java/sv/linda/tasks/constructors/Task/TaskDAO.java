@@ -2,18 +2,23 @@ package sv.linda.tasks.constructors.Task;
 
 import jakarta.annotation.PostConstruct;
 import org.bson.Document;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sv.linda.tasks.Constants;
+import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.functions.Converter;
 
-@Repository
+@Service
 public class TaskDAO implements Constants {
     private Converter convert;
     private Tasks tasks;
+    private DataBaseFunctions database;
 
-    public TaskDAO(Converter convert, Tasks tasks) {
+    @Autowired
+    public TaskDAO(Converter convert, Tasks tasks, DataBaseFunctions database) {
         this.convert = convert;
         this.tasks = tasks;
+        this.database = database;
     }
 
     @PostConstruct

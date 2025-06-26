@@ -3,6 +3,7 @@ package sv.linda.tasks.controllers;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,6 +13,7 @@ import sv.linda.tasks.constructors.Login.LoginDAO;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.constructors.Task.TaskDAO;
 import sv.linda.tasks.constructors.Task.Tasks;
+import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.functions.Converter;
 import sv.linda.tasks.validation.CreateLoginValidator;
 import sv.linda.tasks.validation.LoginValidator;
@@ -32,11 +34,12 @@ class ControllerTest {
     private LoginValidator loginValid = new LoginValidator(List.of(new Login(), new Login()));
     private CreateLoginValidator createloginvalid = new CreateLoginValidator(List.of(new Login(), new Login()));
     private final ViewPages viewPages = new ViewPages(Mockito.mock(Properties.class));
+    private DataBaseFunctions database = Mockito.mock(DataBaseFunctions.class);
 
     ControllerTest() {
-        this.taskDAO = new TaskDAO(new Converter(new Gson()), new Tasks());
-        this.loginDAO = new LoginDAO();
-        this.controller = new TaskController(taskDAO, loginDAO, valid, loginValid, createloginvalid, viewPages);
+        this.taskDAO = new TaskDAO(new Converter(new Gson()), new Tasks(), database);
+        this.loginDAO = Mockito.mock(LoginDAO.class);
+        this.controller = new TaskController(taskDAO, loginDAO, valid, loginValid, createloginvalid, viewPages, new Properties());
         this.mvc = MockMvcBuilders
                 .standaloneSetup(controller)
                 .setValidator(valid)

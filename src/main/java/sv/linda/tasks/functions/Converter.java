@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import lombok.Getter;
 import org.bson.Document;
+import org.springframework.stereotype.Component;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Task.Task;
@@ -16,8 +17,9 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 @Getter
-public class Converter implements Constants {
+public class Converter {
     protected Gson gson;
 
     public Converter(Gson gson) {

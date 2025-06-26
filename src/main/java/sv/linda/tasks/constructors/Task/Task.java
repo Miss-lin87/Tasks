@@ -1,12 +1,14 @@
 package sv.linda.tasks.constructors.Task;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 import sv.linda.tasks.enums.Status;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Component
 public class Task {
     private String title;
     private String description;

@@ -2,14 +2,24 @@ package sv.linda.tasks.constructors.Login;
 
 import jakarta.annotation.PostConstruct;
 import org.bson.Document;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sv.linda.tasks.Constants;
+import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.functions.Converter;
 
-@Repository
+@Service
 public class LoginDAO implements Constants {
-    private final Logins logins = new Logins();
-    private final Converter convert = new Converter(gson);
+    private Logins logins;
+    private Converter convert;
+    private DataBaseFunctions database;
+
+    @Autowired
+    public LoginDAO(Converter convert, Logins logins, DataBaseFunctions database) {
+        this.convert = convert;
+        this.logins = logins;
+        this.database = database;
+    }
 
     @PostConstruct
     public void init() {

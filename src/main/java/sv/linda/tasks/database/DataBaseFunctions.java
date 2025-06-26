@@ -5,11 +5,13 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import sv.linda.tasks.Constants;
 
 public class DataBaseFunctions implements Constants {
     protected MongoDatabase database;
 
+    @Autowired
     public DataBaseFunctions(String URI, String database) {
         MongoClient client = MongoClients.create(URI);
         this.database = client.getDatabase(database);

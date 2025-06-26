@@ -2,15 +2,19 @@ package sv.linda.tasks.functions;
 
 import com.google.gson.Gson;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.database.DataBaseFunctions;
 
+@Service
 public class Save implements Constants {
-    protected final Gson gson;
-    protected DataBaseFunctions database;
+    private Gson gson;
+    private DataBaseFunctions database;
 
+    @Autowired
     public Save(DataBaseFunctions database, Gson gson) {
         this.gson = gson;
         this.database = database;
