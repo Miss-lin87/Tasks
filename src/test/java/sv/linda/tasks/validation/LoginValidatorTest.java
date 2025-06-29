@@ -1,16 +1,16 @@
 package sv.linda.tasks.validation;
 
-import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Login.LoginDAO;
 import sv.linda.tasks.constructors.Login.Logins;
-import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.database.DataBaseFunctions;
 import sv.linda.tasks.functions.Converter;
 
@@ -19,7 +19,15 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class LoginValidatorTest {
+    @Mock
+    Converter converter;
+    @Mock
+    DataBaseFunctions database;
+    Logins logins = new Logins();
+    LoginDAO loginDAO = new LoginDAO(converter, logins, database);
+
     private LoginValidator valid;
     private Login login;
     private Errors errors;
@@ -29,7 +37,8 @@ class LoginValidatorTest {
 
     @BeforeEach
     void setUp() {
-        valid = Mockito.mock(LoginValidator.class);
+        loginDAO.getLogins().setLoginList(nameList);
+        valid = new LoginValidator(loginDAO);
         login = new Login();
         errors = new BeanPropertyBindingResult(login, "login");
     }

@@ -1,30 +1,33 @@
 package sv.linda.tasks.database;
 
 import com.mongodb.client.*;
-import jakarta.annotation.PostConstruct;
 import org.bson.Document;
-import org.bson.assertions.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class DataBaseFunctionTest {
+@ExtendWith(MockitoExtension.class)
+class DataBaseFunctionTest {
     @Mock
-    private MongoClient mockClient = mock(MongoClient.class);
+    MongoDatabase mockDB;
     @Mock
-    private MongoDatabase mockDB = mock(MongoDatabase.class);
+    MongoCollection<Document> mockCollection;
     @Mock
-    private MongoCollection<Document> mockCollection = mock(MongoCollection.class);
+    FindIterable<Document> iterable;
     @Mock
-    private FindIterable<Document> iterable = mock(FindIterable.class);
-    @Mock
-    private MongoCursor<Document> cursor = mock(MongoCursor.class);
+    MongoCursor<Document> cursor;
+
+    @InjectMocks
+    MongoClient mockClient = mock(MongoClient.class);
+
     private final Document mockDock1 = new Document()
             .append("title", "Test 1")
             .append("description", "This is a test document 1");
@@ -38,27 +41,18 @@ public class DataBaseFunctionTest {
         when(mockDB.getCollection(anyString())).thenReturn(mockCollection);
         when(mockCollection.find()).thenReturn(iterable);
         when(iterable.iterator()).thenReturn(cursor);
-        when(cursor.hasNext()).thenReturn(true, true, false);
+        when(cursor.hasNext()).thenReturn(true);
         when(cursor.next()).thenReturn(mockDock1, mockDock2);
     }
 
     @Test
     void getAllDataTest() {
-        DataBaseFunctions mock = mock(DataBaseFunctions.class);
+        DataBaseFunctions mock = new DataBaseFunctions(mockClient, mockDB);
         when(mock.getAllData(anyString())).thenReturn(mockCollection);
         assertAll(
                 () -> assertTrue(mock.getAllData("").find().iterator().hasNext()),
                 () -> assertEquals(mockDock1, mock.getAllData("").find().iterator().next()),
                 () -> assertEquals(mockDock2, mock.getAllData("").find().iterator().next())
-        );
-    }
-
-    @Test
-    void findOneTest() {
-        DataBaseFunctions mock = mock(DataBaseFunctions.class);
-        when(mock.findOne(mockDock1, "test")).thenReturn(true);
-        assertAll(
-                () -> assertTrue(mock.findOne(mockDock1, "test"))
         );
     }
 }

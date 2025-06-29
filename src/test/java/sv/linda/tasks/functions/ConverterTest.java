@@ -2,10 +2,14 @@ package sv.linda.tasks.functions;
 
 import com.google.gson.Gson;
 import com.mongodb.client.*;
+import jakarta.annotation.PostConstruct;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Task.Task;
 import sv.linda.tasks.enums.Status;
@@ -17,44 +21,48 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class ConverterTest {
     @Mock
-    private MongoCollection<Document> mockList = mock(MongoCollection.class);
+    FindIterable<Document> iterable;
     @Mock
-    private FindIterable<Document> iterable = mock(FindIterable.class);
-    @Mock
-    private MongoCursor<Document> cursor = mock(MongoCursor.class);
-    private Gson gson = new Gson();
-    private final Converter converter = new Converter(gson);
-    private final Document mockTaskDoc = new Document();
-    private final Document mockLogin1Dock = new Document();
-    private final Document mockLogin2Dock = new Document();
+    MongoCursor<Document> cursor;
+    @InjectMocks
+    MongoCollection<Document> mockList = mock(MongoCollection.class);
+
+    private final Converter converter = new Converter(new Gson());
+    private final Document mockTaskDoc = new Document()
+            .append("title","Task1")
+            .append("description",  "This is the test for a task")
+            .append("status", "IN_PROGRESS")
+            .append("subtasks", new ArrayList<>());
+    private final Document mockLogin1Dock = new Document()
+            .append("username", "admin")
+            .append("password", "admin1");;
+    private final Document mockLogin2Dock = new Document()
+            .append("username", "user")
+            .append("password", "user123");;
 
 
     private void mockTaskCollection() {
         when(mockList.find()).thenReturn(iterable);
         when(iterable.iterator()).thenReturn(cursor);
-        when(cursor.hasNext()).thenReturn(true,false);
+        when(cursor.hasNext()).thenReturn(true, false);
         when(cursor.next()).thenReturn(mockTaskDoc);
     }
 
     private void mockLoginCollection() {
         when(mockList.find()).thenReturn(iterable);
         when(iterable.iterator()).thenReturn(cursor);
-        when(cursor.hasNext()).thenReturn(true,true,false);
+        when(cursor.hasNext()).thenReturn(true, true, false);
         when(cursor.next()).thenReturn(mockLogin1Dock, mockLogin2Dock);
     }
 
     @BeforeEach
     public void init() {
-        mockTaskDoc.append("title","Task1")
-                .append("description",  "This is the test for a task")
-                .append("status", "IN_PROGRESS")
-                .append("subtasks", new ArrayList<>());
-        mockLogin1Dock.append("username", "admin")
-                .append("password", "admin1");
-        mockLogin2Dock.append("username", "user")
-                .append("password", "user123");
+        //when(mockList.find()).thenReturn(iterable);
+        //when(iterable.iterator()).thenReturn(cursor);
+        //when(cursor.hasNext()).thenReturn(true);
     }
 
     @Test

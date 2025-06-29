@@ -17,13 +17,8 @@ public class LoginValidator implements Validator, Constants {
 
     @Autowired
     public LoginValidator(LoginDAO loginDAO) {
-        this.loginList = new ArrayList<>();
+        this.loginList = loginDAO.getLogins().getLoginList();
         this.loginDAO = loginDAO;
-    }
-
-    @PostConstruct
-    public void init() {
-        loginList.addAll(loginDAO.getLogins().getLoginList());
     }
 
     @Override

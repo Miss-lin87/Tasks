@@ -5,15 +5,9 @@ import com.mongodb.client.MongoCollection;
 import lombok.Getter;
 import org.bson.Document;
 import org.springframework.stereotype.Component;
-import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
 import sv.linda.tasks.constructors.Task.Task;
-import sv.linda.tasks.database.DataBaseFunctions;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 

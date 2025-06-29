@@ -2,22 +2,32 @@ package sv.linda.tasks.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import sv.linda.tasks.Constants;
 import sv.linda.tasks.constructors.Login.Login;
+import sv.linda.tasks.constructors.Login.LoginDAO;
+import sv.linda.tasks.constructors.Login.Logins;
+import sv.linda.tasks.database.DataBaseFunctions;
+import sv.linda.tasks.functions.Converter;
 
-import java.security.KeyStore;
 import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class NewUserValidatorTest implements Constants {
+    @Mock
+    DataBaseFunctions databse;
+    @Mock
+    Converter converter;
+    private Logins logins = new Logins();
     private CreateLoginValidator valid;
     private Login login;
     private Errors errors;
+    private LoginDAO loginDAO = new LoginDAO(converter, logins, databse);
     private final List<Login> mockLoginList = List.of(
             new Login("User1", "Password1"),
             new Login("User2", "Password2"),
@@ -26,7 +36,8 @@ class NewUserValidatorTest implements Constants {
 
     @BeforeEach
     void setUp() {
-        valid = Mockito.mock(CreateLoginValidator.class);
+        loginDAO.getLogins().setLoginList(mockLoginList);
+        valid = new CreateLoginValidator(loginDAO);
         login = new Login();
         errors = new BeanPropertyBindingResult(login, "login");
     }

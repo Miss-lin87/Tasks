@@ -15,17 +15,10 @@ import java.util.regex.Pattern;
 
 public class CreateLoginValidator implements Validator, Constants {
     private final List<Login> logins;
-    private final LoginDAO loginDAO;
 
     @Autowired
     public CreateLoginValidator(LoginDAO loginDAO) {
-        this.logins = new ArrayList<>();
-        this.loginDAO = loginDAO;
-    }
-
-    @PostConstruct
-    public void init() {
-        logins.addAll(loginDAO.getLogins().getLoginList());
+        this.logins = loginDAO.getLogins().getLoginList();
     }
 
     @Override

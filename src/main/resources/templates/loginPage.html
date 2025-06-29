@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>Login Page</title>
 </head>
+<style>
+    .body {
+        align-items: center;
+    }
+</style>
 <body>
-<label>Welcome</label>
+<h1>Welcome</h1>
 <br><td>Please log in to se tasks</td>
 
 <form action="#" th:action="@{/login}" th:object="${login}" method="POST">

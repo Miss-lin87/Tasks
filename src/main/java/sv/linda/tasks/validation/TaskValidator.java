@@ -12,20 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskValidator implements Validator, Constants {
-    private final List<String> nameList;
+    private final List<Task> nameList;
     private final TaskDAO taskDAO;
 
     @Autowired
     public TaskValidator(TaskDAO taskDAO) {
-        this.nameList = new ArrayList<>();
+        this.nameList = taskDAO.getTasks().getTaskList();
         this.taskDAO = taskDAO;
-    }
-
-    @PostConstruct
-    public void init() {
-        for (Task task : taskDAO.getTasks().getTaskList()) {
-            nameList.add(task.getTitle());
-        }
     }
 
     @Override
@@ -36,22 +29,22 @@ public class TaskValidator implements Validator, Constants {
     @Override
     public void validate(Object target, Errors error) {
         Task task = (Task) target;
-        validateTitle(task.getTitle(), error);
-        validateDescription(task.getDescription(), error);
+        validateTitle(task, error);
+        validateDescription(task, error);
     }
 
-    private void validateTitle(String title, Errors error) {
-        if (title == null || title.trim().isEmpty()) {
+    private void validateTitle(Task userTask, Errors error) {
+        if (userTask.getTitle() == null || userTask.getTitle().trim().isEmpty()) {
             error.rejectValue(TITLE, "title.empty", "You need to enter a name");
-        } else if (nameList.contains(title)) {
+        } else if (nameList.stream().anyMatch(task -> task.getTitle().equals(userTask.getTitle()))) {
             error.rejectValue(TITLE, "title.already.exists", "That task name is in use");
         }
     }
 
-    private void validateDescription(String description, Errors error) {
-        if (description == null || description.isEmpty()) {
+    private void validateDescription(Task task, Errors error) {
+        if (task.getDescription() == null || task.getDescription().isEmpty()) {
             error.rejectValue(DESCRIPTION, "description.empty", "You need a description");
-        } else if (description.length() < 10) {
+        } else if (task.getDescription().length() < 10) {
             error.rejectValue(DESCRIPTION, "description.too.short", "Description is too short. Minimum 10 characters");
         }
     }
