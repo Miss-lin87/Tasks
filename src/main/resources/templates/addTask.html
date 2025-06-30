@@ -8,7 +8,7 @@
     <label>Adding a task</label>
 
     <form action="#" th:action="@{/addTask}" th:object="${task}" method="POST">
-        <table>
+        <table Style="align-center">
                 <td>Title: </td>
                 <td><input type="text" th:field="*{title}"></td>
                 <td th:text="${nameError}"></td>

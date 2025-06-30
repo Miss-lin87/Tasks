@@ -1,10 +1,10 @@
 package sv.linda.tasks.functions;
 
 import com.google.gson.Gson;
-import com.mongodb.client.*;
-import jakarta.annotation.PostConstruct;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import org.bson.Document;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -56,13 +56,6 @@ public class ConverterTest {
         when(iterable.iterator()).thenReturn(cursor);
         when(cursor.hasNext()).thenReturn(true, true, false);
         when(cursor.next()).thenReturn(mockLogin1Dock, mockLogin2Dock);
-    }
-
-    @BeforeEach
-    public void init() {
-        //when(mockList.find()).thenReturn(iterable);
-        //when(iterable.iterator()).thenReturn(cursor);
-        //when(cursor.hasNext()).thenReturn(true);
     }
 
     @Test
